@@ -33,7 +33,13 @@ void flux_object_dec_ref(flux_object* obj) {
 }
 
 void flux_object_free(flux_object* obj) {
+    if(obj == NULL)
+        return;
+
     FLUX_DLOG("Freeing flux_object %p", obj);
+
+    // https://stackoverflow.com/questions/2182103/is-it-ok-to-free-void
+    free(obj->value);
     free(obj);
 }
 

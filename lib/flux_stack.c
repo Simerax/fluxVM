@@ -15,6 +15,10 @@ void flux_stack_free(flux_stack* stack) {
         return;
 
     FLUX_DLOG("Freeing flux_stack %p", stack);
+
+    for(int i = 0; i < FLUX_STACK_SIZE; i++) 
+        flux_object_free(stack->objects[i]);
+
     free(stack);
 }
 
@@ -25,6 +29,7 @@ void flux_stack_pop(flux_stack* stack) {
     }
     stack->index--;
     flux_object_dec_ref(stack->objects[stack->index]);
+    stack->objects[stack->index] = NULL; // make sure we don't do a double free on cleanup
 }
 
 void flux_stack_ipush(flux_stack* stack, int value) {
