@@ -3,7 +3,7 @@
 
 #ifndef NDEBUG
 #include<stdio.h>
-#define FLUX_DLOG(_1, ...) printf("[DEBUG] " _1 "\n", __VA_ARGS__)
+#define FLUX_DLOG(_1, ...) printf("[DEBUG] " _1 "\n", ##__VA_ARGS__)
 #else
 #define FLUX_DLOG(...)
 #endif // NDEBUG
