@@ -32,6 +32,12 @@ void flux_vm_free(flux_vm* vm) {
 void flux_vm_store(flux_vm* vm) {
     flux_object* index_obj = flux_stack_get_noffset(vm->stack, 1);
     flux_object* value_obj = flux_stack_get_noffset(vm->stack, 2);
+
+    if(index_obj == NULL || value_obj == NULL) {
+        FLUX_ELOG("Tried storing an object with invalid stack: index_obj %p - value_obj: %p", index_obj, value_obj);
+        return;
+    }
+
     flux_object_inc_ref(value_obj);
 
     int index = *((int*)index_obj->value);
