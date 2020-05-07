@@ -29,6 +29,19 @@ int main(int argc, char** argv)
     flux_vm_print(vm);
 
 
+    /* load variable 1 convert it to double*/
+    flux_vm_load(vm, 1);
+    flux_vm_itod(vm);
+
+    /* store new value in local var 1 */
+    flux_vm_ipush(vm, 1);
+    flux_vm_store(vm);
+
+    flux_vm_load(vm, 1);
+    flux_vm_print(vm);
+
+
+
     flux_vm_free(vm);
     return 0;
 }

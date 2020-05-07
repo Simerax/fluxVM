@@ -1,6 +1,9 @@
 #ifndef FLUX_OBJECT_H
 #define FLUX_OBJECT_H
 
+#include<stddef.h> // size_t
+#include<stdbool.h> // bool
+
 
 typedef enum {
     Integer,
@@ -12,6 +15,7 @@ typedef struct {
     unsigned int ref_count;
     flux_object_type type;
     void* value;
+    size_t value_size;
 } flux_object;
 
 
@@ -24,5 +28,8 @@ void flux_object_dec_ref(flux_object*);
 flux_object* flux_object_iinit(int);
 
 void flux_object_print(flux_object*);
+
+bool flux_object_itod(flux_object*);
+flux_object* flux_object_copy(flux_object*);
 
 #endif //FLUX_OBJECT_H

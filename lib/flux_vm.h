@@ -23,5 +23,7 @@ void flux_vm_ipush(flux_vm*, int value);
 void flux_vm_iadd(flux_vm*);
 void flux_vm_pop(flux_vm*);
 
+void flux_vm_itod(flux_vm*);
+
 
 #endif //FLUX_VM_H

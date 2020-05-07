@@ -66,3 +66,23 @@ void flux_vm_print(flux_vm* vm) {
 void flux_vm_pop(flux_vm* vm) {
     flux_stack_pop(vm->stack);
 }
+
+void flux_vm_itod(flux_vm* vm) {
+    flux_object* integer_obj = flux_stack_get_noffset(vm->stack, 1);
+    if(integer_obj == NULL) {
+        FLUX_ELOG("Tried converting integer to double but stack is empty");
+        return;
+    }
+
+    if(integer_obj->type == Double)
+        return;
+
+    if(integer_obj->type == Integer) {
+        flux_object* copy = flux_object_copy(integer_obj);
+        flux_stack_pop(vm->stack);
+        flux_object_itod(copy);
+        flux_stack_push(vm->stack, copy);
+    } else {
+        FLUX_ELOG("Tried converting int to double but int was of type %d  obj: %p", integer_obj->type, integer_obj);
+    }
+}
