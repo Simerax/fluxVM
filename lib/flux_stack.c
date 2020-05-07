@@ -25,7 +25,7 @@ void flux_stack_free(flux_stack* stack) {
 
 void flux_stack_pop(flux_stack* stack) {
     if(stack->index == 0) {
-        FLUX_DLOG("Trying to pop a value from an empty stack!", "");
+        FLUX_ELOG("Trying to pop a value from an empty stack!", "");
         flux_stack_set_error(stack, flux_stack_error_underflow);
         return; 
     }
@@ -36,7 +36,7 @@ void flux_stack_pop(flux_stack* stack) {
 
 void flux_stack_ipush(flux_stack* stack, int value) {
     if(stack->index == FLUX_STACK_SIZE - 1) {
-        FLUX_DLOG("Tried pushing onto full stack %p", stack);
+        FLUX_ELOG("Tried pushing onto full stack %p", stack);
         flux_stack_set_error(stack, flux_stack_error_overflow);
         return;
     }
@@ -54,7 +54,7 @@ void flux_stack_iadd(flux_stack* stack) {
         flux_stack_pop(stack);
         flux_stack_ipush(stack, result);
     } else {
-        FLUX_DLOG("Cannot do integer add on NULL objects a: %p b: %p", a, b);
+        FLUX_ELOG("Cannot do integer add on NULL objects a: %p b: %p", a, b);
     }
 }
 
@@ -75,12 +75,12 @@ void flux_stack_print(flux_stack* stack) {
         flux_object_print(obj);
         flux_stack_pop(stack);
     } else {
-        FLUX_DLOG("Tried to print Stack Object but Object is NULL!");
+        FLUX_ELOG("Tried to print Stack Object but Object is NULL!");
     }
 }
 
 void flux_stack_set_error(flux_stack* stack, flux_stack_error err) {
-    FLUX_DLOG("flux_stack_set_error: %d", err);
+    FLUX_ELOG("flux_stack_set_error: %d", err);
     stack->error = err;
 }
 
