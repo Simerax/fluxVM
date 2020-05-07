@@ -17,8 +17,9 @@ void flux_stack_free(flux_stack* stack) {
 
     FLUX_DLOG("Freeing flux_stack %p", stack);
 
-    for(int i = 0; i < FLUX_STACK_SIZE; i++) 
-        flux_object_free(stack->objects[i]);
+    for(int i = 0; i < FLUX_STACK_SIZE; i++) {
+        flux_object_dec_ref(stack->objects[i]);
+    }
 
     free(stack);
 }
@@ -42,6 +43,16 @@ void flux_stack_ipush(flux_stack* stack, int value) {
     }
     flux_object* integer = flux_object_iinit(value);
     stack->objects[stack->index] = integer;
+    stack->index++;
+}
+
+void flux_stack_push(flux_stack* stack, flux_object* obj) {
+    if(stack->index == FLUX_STACK_SIZE -1) {
+        FLUX_ELOG("Tried to push object on full stack %p", stack);
+        flux_stack_set_error(stack, flux_stack_error_overflow);
+        return;
+    }
+    stack->objects[stack->index] = obj;
     stack->index++;
 }
 

@@ -5,20 +5,29 @@ int main(int argc, char** argv)
 {
     flux_vm* vm = flux_vm_init();
 
-    /*store value 5 in local variable 0*/
-    //flux_vm_istore(vm, 0, 5);
-    /*put variable at index 0 onto the stack*/
-    //flux_vm_iload(vm, 0);
+    /*store value 5 in variable 0*/
+    flux_vm_ipush(vm, 5);
+    flux_vm_ipush(vm, 0);
+    flux_vm_store(vm);
+
+    /*put variable 0 onto the stack*/
+    flux_vm_load(vm, 0);
 
     /*put integer 10 onto the stack*/
     flux_vm_ipush(vm, 10);
-    flux_vm_ipush(vm, 15);
 
-    /*add the two top elements on the stack together (as ints)*/
+    /*integer addition of the two stack elements*/
     flux_vm_iadd(vm);
 
-    /*print the top element of the stack*/
+    /*store the result of add in variable at index 1*/
+    flux_vm_ipush(vm, 1);
+    flux_vm_store(vm);
+
+
+    /*load variable from index 1 and print it*/
+    flux_vm_load(vm, 1);
     flux_vm_print(vm);
+
 
     flux_vm_free(vm);
     return 0;

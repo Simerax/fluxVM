@@ -22,6 +22,7 @@ flux_stack* flux_stack_init();
 void flux_stack_free(flux_stack*);
 
 void flux_stack_pop(flux_stack*);
+void flux_stack_push(flux_stack*, flux_object*);
 void flux_stack_ipush(flux_stack*, int value);
 void flux_stack_iadd(flux_stack*);
 

@@ -19,11 +19,15 @@ flux_object* flux_object_iinit(int value) {
 }
 
 void flux_object_inc_ref(flux_object* obj) {
+    if(obj == NULL)
+        return;
     obj->ref_count++;
     FLUX_DLOG("Increment Ref count of flux_object %p to %d", obj, obj->ref_count);
 }
 
 void flux_object_dec_ref(flux_object* obj) {
+    if(obj == NULL)
+        return;
     obj->ref_count--;
     FLUX_DLOG("Decrement Ref count of flux_object %p to %d", obj, obj->ref_count);
 
