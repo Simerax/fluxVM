@@ -52,6 +52,7 @@ void flux_stack_push(flux_stack* stack, flux_object* obj) {
         flux_stack_set_error(stack, flux_stack_error_overflow);
         return;
     }
+    flux_object_inc_ref(obj);
     stack->objects[stack->index] = obj;
     stack->index++;
 }

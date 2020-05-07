@@ -45,7 +45,6 @@ void flux_vm_store(flux_vm* vm) {
 
 void flux_vm_load(flux_vm* vm, unsigned int index) {
     flux_object* obj = vm->vars[index];
-    flux_object_inc_ref(obj);
     flux_stack_push(vm->stack, obj);
 }
 void flux_vm_ipush(flux_vm* vm, int value) {
