@@ -18,7 +18,10 @@ void flux_stack_free(flux_stack* stack) {
     FLUX_DLOG("Freeing flux_stack %p", stack);
 
     for(int i = 0; i < FLUX_STACK_SIZE; i++) {
-        flux_object_dec_ref(stack->objects[i]);
+        if(stack->objects[i] != NULL) {
+            FLUX_WLOG("Non Empty Stack on Cleanup!");
+            flux_object_dec_ref(stack->objects[i]);
+        }
     }
 
     free(stack);
