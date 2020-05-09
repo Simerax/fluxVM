@@ -1,0 +1,3 @@
+[submodule "ext/check"]
+	path = ext/check
+	url = https://github.com/libcheck/check
