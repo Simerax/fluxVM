@@ -7,6 +7,7 @@
  * Don't forget to add the testcase to the main suite
  * */
 TEST_HELPER_FUNC_DEFINE(flux_object);
+TEST_HELPER_FUNC_DEFINE(flux_stack);
 
 
 
@@ -16,6 +17,7 @@ Suite* flux_test_suite(void) {
     s = suite_create("fluxVMSuite");
 
     suite_add_tcase(s, tests_flux_object());
+    suite_add_tcase(s, tests_flux_stack());
 
     return s;
 }
