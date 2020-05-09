@@ -97,3 +97,7 @@ bool flux_object_itod(flux_object* obj) {
     }
 
 }
+
+int flux_object_get_int_value(flux_object* obj) {
+    return *((int*)obj->value);
+}

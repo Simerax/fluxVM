@@ -5,6 +5,7 @@ project("test_fluxVM")
 set(LIB_NAME "fluxVM")
 set (CMAKE_C_STANDARD 99)
 
+include_directories("../lib/")
 
 # Check headerfiles are generated at build time - thats why we look inside the build dir
 include_directories("../build/ext/check/src/")
