@@ -101,3 +101,11 @@ bool flux_object_itod(flux_object* obj) {
 int flux_object_get_int_value(flux_object* obj) {
     return *((int*)obj->value);
 }
+
+double flux_object_get_double_value(flux_object* obj) {
+    return *((double*)obj->value);
+}
+
+flux_object_type flux_object_get_type(flux_object* obj) {
+    return obj->type;
+}

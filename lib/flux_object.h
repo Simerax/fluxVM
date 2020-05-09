@@ -33,5 +33,9 @@ bool flux_object_itod(flux_object*);
 flux_object* flux_object_copy(flux_object*);
 
 int flux_object_get_int_value(flux_object*);
+double flux_object_get_double_value(flux_object*);
+
+
+flux_object_type flux_object_get_type(flux_object*);
 
 #endif //FLUX_OBJECT_H
