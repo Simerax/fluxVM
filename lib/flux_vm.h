@@ -2,6 +2,7 @@
 #define FLUX_VM_H
 
 #include"flux_stack.h"
+#include"flux_code.h"
 
 #define FLUX_MAX_VARS 256
 
@@ -24,6 +25,8 @@ void flux_vm_iadd(flux_vm*);
 void flux_vm_pop(flux_vm*);
 
 void flux_vm_itod(flux_vm*);
+
+void flux_vm_execute(flux_vm*, flux_code*);
 
 
 #endif //FLUX_VM_H

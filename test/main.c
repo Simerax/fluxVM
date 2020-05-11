@@ -9,6 +9,7 @@
 TEST_HELPER_FUNC_DEFINE(flux_object);
 TEST_HELPER_FUNC_DEFINE(flux_stack);
 TEST_HELPER_FUNC_DEFINE(flux_vm);
+TEST_HELPER_FUNC_DEFINE(flux_list);
 
 
 
@@ -20,6 +21,7 @@ Suite* flux_test_suite(void) {
     suite_add_tcase(s, tests_flux_object());
     suite_add_tcase(s, tests_flux_stack());
     suite_add_tcase(s, tests_flux_vm());
+    suite_add_tcase(s, tests_flux_list());
 
     return s;
 }
