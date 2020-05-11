@@ -13,10 +13,12 @@ flux_list* flux_list_init(size_t element_size) {
 }
 
 void flux_list_free(flux_list* l) {
+    if(l == NULL)
+        return;
 
     // TODO: FIXME: This is really bad since it does one recursion per list element has to be fixed
     if(l->next != NULL)
-        free(l->next);
+        flux_list_free(l->next);
 
     free(l);
 }
@@ -49,8 +51,6 @@ void** flux_list_to_array(flux_list* l) {
     while(current_element != NULL && current_element->element!= NULL) {
         *(elements + (i * current_element->element_size))  = current_element->element;
         elements[i] = current_element->element;
-        //memcpy(elements + i, current_element->element, l->element_size);
-        //i += current_element->element_size;
         ++i;
         current_element = current_element->next;
     }

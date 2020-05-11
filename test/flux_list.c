@@ -13,9 +13,11 @@ START_TEST(test_list)
 
     ck_assert_int_eq(flux_list_length(l), 2);
 
-    int** arr = flux_list_to_array(l);
+    int** arr = (int**)flux_list_to_array(l);
     ck_assert_int_eq(*arr[0], 2);
     ck_assert_int_eq(*arr[1], 3);
+
+    flux_list_free(l);
 }
 
 TEST_HELPER_START(flux_list);
