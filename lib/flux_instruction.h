@@ -9,6 +9,6 @@ typedef enum {
     LOAD,
     STORE,
     PRINT
-} flux_instruction;
+} FluxInstruction;
 
 #endif //FLUX_INSTRUCTION_H

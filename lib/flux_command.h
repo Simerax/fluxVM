@@ -4,13 +4,13 @@
 #include "flux_object.h"
 
 typedef struct {
-    flux_instruction instruction;
+    FluxInstruction instruction;
     FluxObject** parameters;
     int number_of_parameters;
 } FluxCommand;
 
 
-FluxCommand* flux_command_init(flux_instruction, FluxObject** parameters, int number_of_parameters);
+FluxCommand* flux_command_init(FluxInstruction, FluxObject** parameters, int number_of_parameters);
 void flux_command_free(FluxCommand*);
 
 
