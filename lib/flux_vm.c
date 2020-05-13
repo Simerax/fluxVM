@@ -108,6 +108,13 @@ void flux_vm_execute(FluxVM* vm, FluxCode* code) {
                         break;
             case IADD: flux_vm_iadd(vm);
                        break;
+            case ITOD: flux_vm_itod(vm);
+                       break;
+            case POP: flux_vm_pop(vm);
+                      break;
+            case LOAD: flux_vm_load(vm, flux_object_get_int_value(cmd->parameters[0]));
+                       break;
+            case STORE: flux_vm_store(vm);
             case PRINT: flux_vm_print(vm);
                         break;
             default: FLUX_ELOG("Unknown Instruction %d", cmd->instruction);

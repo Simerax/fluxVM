@@ -53,7 +53,7 @@ int flux_code_convert_to_flux_commands(char* bytes, int length, FluxCommand*** c
             flux_list_add(list, pop_command);
             number_of_commands++;
         }
-        if (bytes[i] == IPUSH) {
+        else if (bytes[i] == IPUSH) {
             int number;
             memcpy(&number, (bytes + i + 1), 4);
             i += 4;
@@ -65,22 +65,37 @@ int flux_code_convert_to_flux_commands(char* bytes, int length, FluxCommand*** c
             flux_list_add(list, ipush_command);
             number_of_commands++;
         }
-        if (bytes[i] == IADD) {
+        else if (bytes[i] == IADD) {
             flux_list_add(list, flux_command_init(IADD, NULL, 0));
             number_of_commands++;
         }
-        if (bytes[i] == LOAD) {
+        else if (bytes[i] == LOAD) {
             flux_list_add(list, flux_command_init(LOAD, NULL, 0));
             number_of_commands++;
         }
-        if (bytes[i] == STORE) {
+        else if (bytes[i] == STORE) {
             flux_list_add(list, flux_command_init(STORE, NULL, 0));
             number_of_commands++;
         }
-        if (bytes[i] == PRINT) {
+        else if (bytes[i] == PRINT) {
             FluxCommand* c = flux_command_init(PRINT, NULL, 0);
             flux_list_add(list, c);
             number_of_commands++;
+        }
+        else if (bytes[i] == ITOD) {
+            int number;
+            memcpy(&number, (bytes + i + 1), 4);
+            i += 4;
+            number = INT32_TO_SYSTEM_ENDIANNESS(number);
+            FluxObject* itod_obj = flux_object_iinit(number);
+            FluxObject** param = malloc(sizeof(FluxObject*));
+            param[0] = itod_obj;
+            FluxCommand* ipush_command = flux_command_init(ITOD, param, 1);
+            flux_list_add(list, ipush_command);
+            number_of_commands++;
+        }
+        else {
+            FLUX_WLOG("Unknown Command '%d' in bytecode at byte position %d -- Command is being ignored", bytes[i], i);
         }
     }
 
