@@ -14,7 +14,7 @@ typedef enum {
 typedef struct {
     int index; // not unsigned because we might need to detect an underflow
     FluxStackError error;
-    flux_object** objects;
+    FluxObject** objects;
 } FluxStack;
 
 
@@ -22,7 +22,7 @@ FluxStack* flux_stack_init();
 void flux_stack_free(FluxStack*);
 
 void flux_stack_pop(FluxStack*);
-void flux_stack_push(FluxStack*, flux_object*);
+void flux_stack_push(FluxStack*, FluxObject*);
 void flux_stack_ipush(FluxStack*, int value);
 void flux_stack_iadd(FluxStack*);
 
@@ -32,7 +32,7 @@ void flux_stack_reset_error(FluxStack*);
 
 
 // get stack object at negative offset
-flux_object* flux_stack_get_noffset(FluxStack*, int offset);
+FluxObject* flux_stack_get_noffset(FluxStack*, int offset);
 
 void flux_stack_print(FluxStack*);
 

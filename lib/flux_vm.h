@@ -8,7 +8,7 @@
 
 typedef struct {
     FluxStack* stack;
-    flux_object** vars;
+    FluxObject** vars;
 } FluxVM;
 
 
@@ -21,7 +21,7 @@ void flux_vm_store(FluxVM*);
 void flux_vm_load(FluxVM*, unsigned int index);
 
 void flux_vm_ipush(FluxVM*, int value);
-void flux_vm_push(FluxVM*, flux_object*);
+void flux_vm_push(FluxVM*, FluxObject*);
 void flux_vm_iadd(FluxVM*);
 void flux_vm_pop(FluxVM*);
 

@@ -5,12 +5,12 @@
 
 typedef struct {
     flux_instruction instruction;
-    flux_object** parameters;
+    FluxObject** parameters;
     int number_of_parameters;
 } flux_command;
 
 
-flux_command* flux_command_init(flux_instruction, flux_object** parameters, int number_of_parameters);
+flux_command* flux_command_init(flux_instruction, FluxObject** parameters, int number_of_parameters);
 void flux_command_free(flux_command*);
 
 

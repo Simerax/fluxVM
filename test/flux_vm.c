@@ -12,7 +12,7 @@ START_TEST (test_stack_integer_addition)
 
     flux_vm_iadd(vm);
 
-    flux_object* result = flux_stack_get_noffset(vm->stack, 1);
+    FluxObject* result = flux_stack_get_noffset(vm->stack, 1);
 
     ck_assert_int_eq(flux_object_get_type(result), Integer);
     ck_assert_int_eq(flux_object_get_int_value(result), 28);
@@ -34,7 +34,7 @@ START_TEST (test_adding_int_variables)
 
     flux_vm_iadd(vm);
 
-    flux_object* result = flux_stack_get_noffset(vm->stack, 1);
+    FluxObject* result = flux_stack_get_noffset(vm->stack, 1);
 
     ck_assert_int_eq(flux_object_get_type(result), Integer);
     ck_assert_int_eq(flux_object_get_int_value(result), 360);
@@ -89,7 +89,7 @@ START_TEST (test_running_bytecode)
 
 
     flux_vm_execute(vm, code);
-    flux_object* result = flux_stack_get_noffset(vm->stack, 1);
+    FluxObject* result = flux_stack_get_noffset(vm->stack, 1);
 
     ck_assert_int_eq(flux_object_get_int_value(result), 42);
 

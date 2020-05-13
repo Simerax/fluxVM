@@ -2,7 +2,7 @@
 #include<stdlib.h>
 
 
-flux_command* flux_command_init(flux_instruction fi, flux_object** parameters, int number_of_parameters) {
+flux_command* flux_command_init(flux_instruction fi, FluxObject** parameters, int number_of_parameters) {
     flux_command* cmd = malloc(sizeof(flux_command));
     cmd->instruction = fi;
     cmd->parameters = parameters;

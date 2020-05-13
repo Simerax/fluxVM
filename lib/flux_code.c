@@ -55,8 +55,8 @@ int flux_code_convert_to_flux_commands(char* bytes, int length, flux_command*** 
             memcpy(&number, (bytes + i + 1), 4);
             i += 4;
             number = INT32_TO_SYSTEM_ENDIANNESS(number);
-            flux_object* int_obj = flux_object_iinit(number);
-            flux_object** param = malloc(sizeof(flux_object*));
+            FluxObject* int_obj = flux_object_iinit(number);
+            FluxObject** param = malloc(sizeof(FluxObject*));
             param[0] = int_obj;
             flux_command* ipush_command = flux_command_init(IPUSH, param, 1);
             flux_list_add(list, ipush_command);

@@ -32,7 +32,7 @@ START_TEST (test_stack_underflow)
 
     ck_assert_int_eq(flux_stack_get_error(stack), flux_stack_error_no_error);
 
-    flux_object* underflow_access_obj = flux_stack_get_noffset(stack, 1);
+    FluxObject* underflow_access_obj = flux_stack_get_noffset(stack, 1);
 
     ck_assert_ptr_null(underflow_access_obj);
     ck_assert_int_eq(flux_stack_get_error(stack), flux_stack_error_underflow_access);

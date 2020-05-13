@@ -10,7 +10,7 @@ FluxVM* flux_vm_init() {
     FLUX_DLOG("Initializing FluxVM %p", vm);
 
     vm->stack = flux_stack_init();
-    vm->vars = malloc(sizeof(flux_object*[FLUX_MAX_VARS]));
+    vm->vars = malloc(sizeof(FluxObject*[FLUX_MAX_VARS]));
 
     return vm;
 }
@@ -30,8 +30,8 @@ void flux_vm_free(FluxVM* vm) {
 
 
 void flux_vm_store(FluxVM* vm) {
-    flux_object* index_obj = flux_stack_get_noffset(vm->stack, 1);
-    flux_object* value_obj = flux_stack_get_noffset(vm->stack, 2);
+    FluxObject* index_obj = flux_stack_get_noffset(vm->stack, 1);
+    FluxObject* value_obj = flux_stack_get_noffset(vm->stack, 2);
 
     if(index_obj == NULL || value_obj == NULL) {
         FLUX_ELOG("Tried storing an object with invalid stack: index_obj %p - value_obj: %p", index_obj, value_obj);
@@ -50,7 +50,7 @@ void flux_vm_store(FluxVM* vm) {
 }
 
 void flux_vm_load(FluxVM* vm, unsigned int index) {
-    flux_object* obj = vm->vars[index];
+    FluxObject* obj = vm->vars[index];
     flux_stack_push(vm->stack, obj);
 }
 void flux_vm_ipush(FluxVM* vm, int value) {
@@ -67,12 +67,12 @@ void flux_vm_pop(FluxVM* vm) {
     flux_stack_pop(vm->stack);
 }
 
-void flux_vm_push(FluxVM* vm, flux_object* obj) {
+void flux_vm_push(FluxVM* vm, FluxObject* obj) {
     flux_stack_push(vm->stack, obj);
 }
 
 void flux_vm_itod(FluxVM* vm) {
-    flux_object* integer_obj = flux_stack_get_noffset(vm->stack, 1);
+    FluxObject* integer_obj = flux_stack_get_noffset(vm->stack, 1);
     if(integer_obj == NULL) {
         FLUX_ELOG("Tried converting integer to double but stack is empty");
         return;
@@ -82,7 +82,7 @@ void flux_vm_itod(FluxVM* vm) {
         return;
 
     if(integer_obj->type == Integer) {
-        flux_object* copy = flux_object_copy(integer_obj);
+        FluxObject* copy = flux_object_copy(integer_obj);
         flux_stack_pop(vm->stack);
         flux_object_itod(copy);
         flux_stack_push(vm->stack, copy);

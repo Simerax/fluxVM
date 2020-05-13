@@ -7,7 +7,7 @@ FluxStack* flux_stack_init() {
     FLUX_DLOG("Initializing FluxStack %p", stack);
     stack->index = 0;
     stack->error = flux_stack_error_no_error;
-    stack->objects = malloc(sizeof(flux_object*[FLUX_STACK_SIZE]));
+    stack->objects = malloc(sizeof(FluxObject*[FLUX_STACK_SIZE]));
     return stack;
 }
 
@@ -44,12 +44,12 @@ void flux_stack_ipush(FluxStack* stack, int value) {
         flux_stack_set_error(stack, flux_stack_error_overflow);
         return;
     }
-    flux_object* integer = flux_object_iinit(value);
+    FluxObject* integer = flux_object_iinit(value);
     stack->objects[stack->index] = integer;
     stack->index++;
 }
 
-void flux_stack_push(FluxStack* stack, flux_object* obj) {
+void flux_stack_push(FluxStack* stack, FluxObject* obj) {
     if(stack->index == FLUX_STACK_SIZE -1) {
         FLUX_ELOG("Tried to push object on full stack %p", stack);
         flux_stack_set_error(stack, flux_stack_error_overflow);
@@ -61,8 +61,8 @@ void flux_stack_push(FluxStack* stack, flux_object* obj) {
 }
 
 void flux_stack_iadd(FluxStack* stack) {
-    flux_object* a = flux_stack_get_noffset(stack, 1);
-    flux_object* b = flux_stack_get_noffset(stack, 2);
+    FluxObject* a = flux_stack_get_noffset(stack, 1);
+    FluxObject* b = flux_stack_get_noffset(stack, 2);
     if(a != NULL && b != NULL) {
         int result = *((int*)a->value) + *((int*)b->value);
         flux_stack_pop(stack);
@@ -74,7 +74,7 @@ void flux_stack_iadd(FluxStack* stack) {
 }
 
 
-flux_object* flux_stack_get_noffset(FluxStack* stack, int offset) {
+FluxObject* flux_stack_get_noffset(FluxStack* stack, int offset) {
     if (stack->index - offset < 0) {
         flux_stack_set_error(stack, flux_stack_error_underflow_access);
         return NULL;
@@ -84,7 +84,7 @@ flux_object* flux_stack_get_noffset(FluxStack* stack, int offset) {
 }
 
 void flux_stack_print(FluxStack* stack) {
-    flux_object* obj = flux_stack_get_noffset(stack, 1);
+    FluxObject* obj = flux_stack_get_noffset(stack, 1);
 
     if(obj != NULL) {
         flux_object_print(obj);

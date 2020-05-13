@@ -4,7 +4,7 @@
 
 START_TEST (test_integer_flux_object)
 {
-    flux_object* obj = flux_object_iinit(5);
+    FluxObject* obj = flux_object_iinit(5);
 
     ck_assert_int_eq(obj->type, Integer);
     ck_assert_int_eq(flux_object_get_int_value(obj), 5);
@@ -16,7 +16,7 @@ END_TEST
 
 START_TEST (test_integer_to_double_flux_object)
 {
-    flux_object* obj = flux_object_iinit(5);
+    FluxObject* obj = flux_object_iinit(5);
 
     ck_assert_int_eq(flux_object_get_type(obj), Integer);
     ck_assert_int_eq(flux_object_itod(obj), 1);

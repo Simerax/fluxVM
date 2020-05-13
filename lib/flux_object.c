@@ -3,17 +3,17 @@
 #include<stdlib.h>
 #include<string.h> // memcpy
 
-flux_object* flux_object_init() {
-    flux_object* obj = malloc(sizeof(flux_object));
-    FLUX_DLOG("Initializing flux_object %p", obj);
+FluxObject* flux_object_init() {
+    FluxObject* obj = malloc(sizeof(FluxObject));
+    FLUX_DLOG("Initializing FluxObject %p", obj);
     obj->ref_count = 0;
     obj->value_size = 0;
     flux_object_inc_ref(obj);
     return obj;
 }
 
-flux_object* flux_object_iinit(int value) {
-    flux_object* obj = flux_object_init();
+FluxObject* flux_object_iinit(int value) {
+    FluxObject* obj = flux_object_init();
     obj->type = Integer;
     obj->value_size = sizeof(int);
     obj->value = malloc(obj->value_size);
@@ -21,36 +21,36 @@ flux_object* flux_object_iinit(int value) {
     return obj;
 }
 
-void flux_object_inc_ref(flux_object* obj) {
+void flux_object_inc_ref(FluxObject* obj) {
     if(obj == NULL)
         return;
     obj->ref_count++;
-    FLUX_DLOG("Increment Ref count of flux_object %p to %d", obj, obj->ref_count);
+    FLUX_DLOG("Increment Ref count of FluxObject %p to %d", obj, obj->ref_count);
 }
 
-void flux_object_dec_ref(flux_object* obj) {
+void flux_object_dec_ref(FluxObject* obj) {
     if(obj == NULL)
         return;
     obj->ref_count--;
-    FLUX_DLOG("Decrement Ref count of flux_object %p to %d", obj, obj->ref_count);
+    FLUX_DLOG("Decrement Ref count of FluxObject %p to %d", obj, obj->ref_count);
 
     if(obj->ref_count == 0) {
         flux_object_free(obj);
     }
 }
 
-void flux_object_free(flux_object* obj) {
+void flux_object_free(FluxObject* obj) {
     if(obj == NULL)
         return;
 
-    FLUX_DLOG("Freeing flux_object %p", obj);
+    FLUX_DLOG("Freeing FluxObject %p", obj);
 
     // https://stackoverflow.com/questions/2182103/is-it-ok-to-free-void
     free(obj->value);
     free(obj);
 }
 
-void flux_object_print(flux_object* obj) {
+void flux_object_print(FluxObject* obj) {
     if(obj == NULL) {
         FLUX_ELOG("Tried printing NULL Object");
         return;
@@ -65,11 +65,11 @@ void flux_object_print(flux_object* obj) {
     }
 }
 
-flux_object* flux_object_copy(flux_object* original) {
+FluxObject* flux_object_copy(FluxObject* original) {
     if(original == NULL)
         return NULL;
 
-    flux_object* copy = flux_object_init();
+    FluxObject* copy = flux_object_init();
     copy->type = original->type;
     copy->value = malloc(sizeof(original->value_size));
     copy->value_size = original->value_size;
@@ -77,7 +77,7 @@ flux_object* flux_object_copy(flux_object* original) {
     return copy;
 }
 
-bool flux_object_itod(flux_object* obj) {
+bool flux_object_itod(FluxObject* obj) {
     if(obj == NULL)
         return false;
 
@@ -98,14 +98,14 @@ bool flux_object_itod(flux_object* obj) {
 
 }
 
-int flux_object_get_int_value(flux_object* obj) {
+int flux_object_get_int_value(FluxObject* obj) {
     return *((int*)obj->value);
 }
 
-double flux_object_get_double_value(flux_object* obj) {
+double flux_object_get_double_value(FluxObject* obj) {
     return *((double*)obj->value);
 }
 
-flux_object_type flux_object_get_type(flux_object* obj) {
+FluxObjectType flux_object_get_type(FluxObject* obj) {
     return obj->type;
 }
