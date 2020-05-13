@@ -11,6 +11,8 @@ FluxVM* flux_vm_init() {
 
     vm->stack = flux_stack_init();
     vm->vars = malloc(sizeof(FluxObject*[FLUX_MAX_VARS]));
+    for(int i = 0; i < FLUX_MAX_VARS; i++)
+        vm->vars[i] = NULL;
 
     return vm;
 }
@@ -22,7 +24,8 @@ void flux_vm_free(FluxVM* vm) {
     flux_stack_free(vm->stack);
 
     for(int i = 0; i < FLUX_MAX_VARS; i++)
-        flux_object_dec_ref(vm->vars[i]);
+        if(vm->vars[i] != NULL)
+            flux_object_dec_ref(vm->vars[i]);
 
     FLUX_DLOG("Freeing FluxVM %p", vm);
     free(vm);
@@ -105,6 +108,8 @@ void flux_vm_execute(FluxVM* vm, FluxCode* code) {
                         break;
             case IADD: flux_vm_iadd(vm);
                        break;
+            case PRINT: flux_vm_print(vm);
+                        break;
             default: FLUX_ELOG("Unknown Instruction %d", cmd->instruction);
                      break;
         }
