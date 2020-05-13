@@ -96,7 +96,7 @@ void flux_vm_execute(FluxVM* vm, flux_code* code) {
     int current_command_index = 0;
 
     while(current_command_index < code->number_of_commands) {
-        flux_command* cmd = code->commands[current_command_index];
+        FluxCommand* cmd = code->commands[current_command_index];
         current_command_index++;
 
 

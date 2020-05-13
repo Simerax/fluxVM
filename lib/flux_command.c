@@ -2,15 +2,15 @@
 #include<stdlib.h>
 
 
-flux_command* flux_command_init(flux_instruction fi, FluxObject** parameters, int number_of_parameters) {
-    flux_command* cmd = malloc(sizeof(flux_command));
+FluxCommand* flux_command_init(flux_instruction fi, FluxObject** parameters, int number_of_parameters) {
+    FluxCommand* cmd = malloc(sizeof(FluxCommand));
     cmd->instruction = fi;
     cmd->parameters = parameters;
     cmd->number_of_parameters = number_of_parameters;
     return cmd;
 }
 
-void flux_command_free(flux_command* cmd) {
+void flux_command_free(FluxCommand* cmd) {
     if(cmd == NULL)
         return;
     

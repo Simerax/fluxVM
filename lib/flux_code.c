@@ -16,7 +16,7 @@ flux_code* flux_code_init(char* bytes, int length) {
 
     flux_code* code = malloc(sizeof(flux_code));
 
-    flux_command** commands;
+    FluxCommand** commands;
     int number_of_commands = flux_code_convert_to_flux_commands(bytes, length, &commands);
 
     code->commands = commands;
@@ -36,9 +36,9 @@ void flux_code_free(flux_code* code) {
     free(code);
 }
 
-int flux_code_convert_to_flux_commands(char* bytes, int length, flux_command*** commands) {
+int flux_code_convert_to_flux_commands(char* bytes, int length, FluxCommand*** commands) {
 
-    FluxList* list = flux_list_init(sizeof(flux_command*));
+    FluxList* list = flux_list_init(sizeof(FluxCommand*));
 
     int number_of_commands = 0;
 
@@ -46,7 +46,7 @@ int flux_code_convert_to_flux_commands(char* bytes, int length, flux_command*** 
     
     for(int i = 0; i < length; i++)  {
         if (bytes[i] == POP) {
-            flux_command* pop_command = flux_command_init(POP, NULL, 0);
+            FluxCommand* pop_command = flux_command_init(POP, NULL, 0);
             flux_list_add(list, pop_command);
             number_of_commands++;
         }
@@ -58,7 +58,7 @@ int flux_code_convert_to_flux_commands(char* bytes, int length, flux_command*** 
             FluxObject* int_obj = flux_object_iinit(number);
             FluxObject** param = malloc(sizeof(FluxObject*));
             param[0] = int_obj;
-            flux_command* ipush_command = flux_command_init(IPUSH, param, 1);
+            FluxCommand* ipush_command = flux_command_init(IPUSH, param, 1);
             flux_list_add(list, ipush_command);
             number_of_commands++;
         }
@@ -75,14 +75,14 @@ int flux_code_convert_to_flux_commands(char* bytes, int length, flux_command*** 
             number_of_commands++;
         }
         if (bytes[i] == PRINT) {
-            flux_command* c = flux_command_init(PRINT, NULL, 0);
+            FluxCommand* c = flux_command_init(PRINT, NULL, 0);
             flux_list_add(list, c);
             number_of_commands++;
         }
     }
 
 
-    *commands = (flux_command**)flux_list_to_array(list);
+    *commands = (FluxCommand**)flux_list_to_array(list);
     
     return number_of_commands;
 }

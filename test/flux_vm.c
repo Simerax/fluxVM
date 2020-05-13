@@ -76,7 +76,7 @@ START_TEST (test_running_bytecode)
 
     ck_assert_int_eq(code->number_of_commands, 3);
 
-    flux_command** commands = code->commands;
+    FluxCommand** commands = code->commands;
     
     ck_assert_ptr_nonnull(commands);
     ck_assert_ptr_nonnull(commands[0]);
