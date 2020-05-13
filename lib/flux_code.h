@@ -11,6 +11,7 @@ typedef struct {
 
 
 flux_code* flux_code_init(char* bytes, int length);
+void flux_code_free(flux_code*);
 size_t flux_code_length(flux_code*);
 char* flux_code_code_ptr(flux_code*);
 int flux_code_convert_to_flux_commands(char* bytes, int length, flux_command*** commands);

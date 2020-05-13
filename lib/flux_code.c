@@ -25,6 +25,16 @@ flux_code* flux_code_init(char* bytes, int length) {
     return code;
 }
 
+void flux_code_free(flux_code* code) {
+    if(code == NULL)
+        return;
+    
+    for(int i = 0; i < code->number_of_commands; i++) {
+        if(code->commands[i] != NULL)
+            flux_command_free(code->commands[i]);
+    }
+    free(code);
+}
 
 int flux_code_convert_to_flux_commands(char* bytes, int length, flux_command*** commands) {
 

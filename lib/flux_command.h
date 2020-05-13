@@ -11,6 +11,7 @@ typedef struct {
 
 
 flux_command* flux_command_init(flux_instruction, flux_object** parameters, int number_of_parameters);
+void flux_command_free(flux_command*);
 
 
 #endif //FLUX_COMMAND_H

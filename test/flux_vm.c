@@ -93,7 +93,7 @@ START_TEST (test_running_bytecode)
 
     ck_assert_int_eq(flux_object_get_int_value(result), 42);
 
-
+    flux_code_free(code);
     flux_vm_free(vm);
 }
 END_TEST
