@@ -15,26 +15,26 @@ typedef struct {
     int index; // not unsigned because we might need to detect an underflow
     flux_stack_error error;
     flux_object** objects;
-} flux_stack;
+} FluxStack;
 
 
-flux_stack* flux_stack_init();
-void flux_stack_free(flux_stack*);
+FluxStack* flux_stack_init();
+void flux_stack_free(FluxStack*);
 
-void flux_stack_pop(flux_stack*);
-void flux_stack_push(flux_stack*, flux_object*);
-void flux_stack_ipush(flux_stack*, int value);
-void flux_stack_iadd(flux_stack*);
+void flux_stack_pop(FluxStack*);
+void flux_stack_push(FluxStack*, flux_object*);
+void flux_stack_ipush(FluxStack*, int value);
+void flux_stack_iadd(FluxStack*);
 
-void flux_stack_set_error(flux_stack*, flux_stack_error);
-flux_stack_error flux_stack_get_error(flux_stack*);
-void flux_stack_reset_error(flux_stack*);
+void flux_stack_set_error(FluxStack*, flux_stack_error);
+flux_stack_error flux_stack_get_error(FluxStack*);
+void flux_stack_reset_error(FluxStack*);
 
 
 // get stack object at negative offset
-flux_object* flux_stack_get_noffset(flux_stack*, int offset);
+flux_object* flux_stack_get_noffset(FluxStack*, int offset);
 
-void flux_stack_print(flux_stack*);
+void flux_stack_print(FluxStack*);
 
 
 

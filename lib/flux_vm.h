@@ -7,7 +7,7 @@
 #define FLUX_MAX_VARS 256
 
 typedef struct {
-    flux_stack* stack;
+    FluxStack* stack;
     flux_object** vars;
 } FluxVM;
 
