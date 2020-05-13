@@ -6,14 +6,14 @@
 typedef struct {
     FluxCommand** commands;
     int number_of_commands;
-} flux_code;
+} FluxCode;
 
 
 
-flux_code* flux_code_init(char* bytes, int length);
-void flux_code_free(flux_code*);
-size_t flux_code_length(flux_code*);
-char* flux_code_code_ptr(flux_code*);
+FluxCode* flux_code_init(char* bytes, int length);
+void flux_code_free(FluxCode*);
+size_t flux_code_length(FluxCode*);
+char* flux_code_code_ptr(FluxCode*);
 int flux_code_convert_to_flux_commands(char* bytes, int length, FluxCommand*** commands);
 
 #endif //FLUX_CODE_H

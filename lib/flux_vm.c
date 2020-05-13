@@ -91,7 +91,7 @@ void flux_vm_itod(FluxVM* vm) {
     }
 }
 
-void flux_vm_execute(FluxVM* vm, flux_code* code) {
+void flux_vm_execute(FluxVM* vm, FluxCode* code) {
 
     int current_command_index = 0;
 

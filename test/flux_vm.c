@@ -72,7 +72,7 @@ START_TEST (test_running_bytecode)
     };
     // after this bytecode the result of 20 + 22 should be on top of the stack
 
-    flux_code* code = flux_code_init(bytecode, 11);
+    FluxCode* code = flux_code_init(bytecode, 11);
 
     ck_assert_int_eq(code->number_of_commands, 3);
 

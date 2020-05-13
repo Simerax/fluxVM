@@ -12,9 +12,9 @@
 //#error System Endianness not supported
 //#endif 
 
-flux_code* flux_code_init(char* bytes, int length) {
+FluxCode* flux_code_init(char* bytes, int length) {
 
-    flux_code* code = malloc(sizeof(flux_code));
+    FluxCode* code = malloc(sizeof(FluxCode));
 
     FluxCommand** commands;
     int number_of_commands = flux_code_convert_to_flux_commands(bytes, length, &commands);
@@ -25,7 +25,7 @@ flux_code* flux_code_init(char* bytes, int length) {
     return code;
 }
 
-void flux_code_free(flux_code* code) {
+void flux_code_free(FluxCode* code) {
     if(code == NULL)
         return;
     

@@ -27,7 +27,7 @@ void flux_vm_pop(FluxVM*);
 
 void flux_vm_itod(FluxVM*);
 
-void flux_vm_execute(FluxVM*, flux_code*);
+void flux_vm_execute(FluxVM*, FluxCode*);
 
 
 #endif //FLUX_VM_H
