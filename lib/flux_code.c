@@ -42,7 +42,7 @@ int flux_code_convert_to_flux_commands(char* bytes, int length, flux_command*** 
         }
         if (bytes[i] == IPUSH) {
             int number;
-            memcpy(&number, bytes, 4);
+            memcpy(&number, (bytes + i + 1), 4);
             i += 4;
             number = INT32_TO_SYSTEM_ENDIANNESS(number);
             flux_object* int_obj = flux_object_iinit(number);

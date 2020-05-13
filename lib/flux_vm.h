@@ -21,6 +21,7 @@ void flux_vm_store(flux_vm*);
 void flux_vm_load(flux_vm*, unsigned int index);
 
 void flux_vm_ipush(flux_vm*, int value);
+void flux_vm_push(flux_vm*, flux_object*);
 void flux_vm_iadd(flux_vm*);
 void flux_vm_pop(flux_vm*);
 

@@ -67,6 +67,10 @@ void flux_vm_pop(flux_vm* vm) {
     flux_stack_pop(vm->stack);
 }
 
+void flux_vm_push(flux_vm* vm, flux_object* obj) {
+    flux_stack_push(vm->stack, obj);
+}
+
 void flux_vm_itod(flux_vm* vm) {
     flux_object* integer_obj = flux_stack_get_noffset(vm->stack, 1);
     if(integer_obj == NULL) {
@@ -86,3 +90,24 @@ void flux_vm_itod(flux_vm* vm) {
         FLUX_ELOG("Tried converting int to double but int was of type %d  obj: %p", integer_obj->type, integer_obj);
     }
 }
+
+void flux_vm_execute(flux_vm* vm, flux_code* code) {
+
+    int current_command_index = 0;
+
+    while(current_command_index < code->number_of_commands) {
+        flux_command* cmd = code->commands[current_command_index];
+        current_command_index++;
+
+
+        switch(cmd->instruction) {
+            case IPUSH: flux_vm_push(vm, cmd->parameters[0]);
+                        break;
+            case IADD: flux_vm_iadd(vm);
+                       break;
+            default: FLUX_ELOG("Unknown Instruction %d", cmd->instruction);
+                     break;
+        }
+    }
+}
+

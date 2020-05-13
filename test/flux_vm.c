@@ -54,8 +54,8 @@ START_TEST (test_running_bytecode)
         // Integer 20 in big endian notation 4 byte
         0,
         0,
-        20,
         0,
+        20,
 
 
         //IPUSH
@@ -64,8 +64,8 @@ START_TEST (test_running_bytecode)
         // Integer 22 in big endian notation 4 byte
         0,
         0,
-        22,
         0,
+        22,
 
         //IADD
         1,
@@ -88,13 +88,10 @@ START_TEST (test_running_bytecode)
     ck_assert_int_eq(commands[2]->instruction, IADD);
 
 
-    //ck_assert_int_eq(cmd->instruction, IPUSH);
-    //ck_assert_int_eq(*(code->commands)->instruction, IPUSH);
+    flux_vm_execute(vm, code);
+    flux_object* result = flux_stack_get_noffset(vm->stack, 1);
 
-    //flux_vm_execute(vm, code);
-    //flux_object* result = flux_stack_get_noffset(vm->stack, 1);
-
-    //ck_assert_int_eq(flux_object_get_int_value(result), 42);
+    ck_assert_int_eq(flux_object_get_int_value(result), 42);
 
 
     flux_vm_free(vm);
