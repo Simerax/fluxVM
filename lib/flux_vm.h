@@ -9,25 +9,25 @@
 typedef struct {
     flux_stack* stack;
     flux_object** vars;
-} flux_vm;
+} FluxVM;
 
 
-flux_vm* flux_vm_init();
-void flux_vm_free(flux_vm*);
+FluxVM* flux_vm_init();
+void flux_vm_free(FluxVM*);
 
-void flux_vm_print(flux_vm*);
+void flux_vm_print(FluxVM*);
 
-void flux_vm_store(flux_vm*);
-void flux_vm_load(flux_vm*, unsigned int index);
+void flux_vm_store(FluxVM*);
+void flux_vm_load(FluxVM*, unsigned int index);
 
-void flux_vm_ipush(flux_vm*, int value);
-void flux_vm_push(flux_vm*, flux_object*);
-void flux_vm_iadd(flux_vm*);
-void flux_vm_pop(flux_vm*);
+void flux_vm_ipush(FluxVM*, int value);
+void flux_vm_push(FluxVM*, flux_object*);
+void flux_vm_iadd(FluxVM*);
+void flux_vm_pop(FluxVM*);
 
-void flux_vm_itod(flux_vm*);
+void flux_vm_itod(FluxVM*);
 
-void flux_vm_execute(flux_vm*, flux_code*);
+void flux_vm_execute(FluxVM*, flux_code*);
 
 
 #endif //FLUX_VM_H

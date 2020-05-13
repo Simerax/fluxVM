@@ -5,7 +5,7 @@
 
 START_TEST (test_stack_integer_addition)
 {
-    flux_vm* vm = flux_vm_init();
+    FluxVM* vm = flux_vm_init();
 
     flux_vm_ipush(vm, 5);
     flux_vm_ipush(vm, 23);
@@ -23,7 +23,7 @@ END_TEST
 
 START_TEST (test_adding_int_variables)
 {
-    flux_vm* vm = flux_vm_init();
+    FluxVM* vm = flux_vm_init();
 
     flux_vm_ipush(vm, 354);
     flux_vm_ipush(vm, 0);
@@ -45,7 +45,7 @@ END_TEST
 
 START_TEST (test_running_bytecode)
 {
-    flux_vm* vm = flux_vm_init();
+    FluxVM* vm = flux_vm_init();
 
     char bytecode[11] = {
         //IPUSH

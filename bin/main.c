@@ -3,7 +3,7 @@
 
 int main(int argc, char** argv)
 {
-    flux_vm* vm = flux_vm_init();
+    FluxVM* vm = flux_vm_init();
 
     /*store value 5 in variable 0*/
     flux_vm_ipush(vm, 5);

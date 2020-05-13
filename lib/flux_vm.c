@@ -5,9 +5,9 @@
 #include<stdlib.h>
 
 
-flux_vm* flux_vm_init() {
-    flux_vm* vm = malloc(sizeof(flux_vm));
-    FLUX_DLOG("Initializing flux_vm %p", vm);
+FluxVM* flux_vm_init() {
+    FluxVM* vm = malloc(sizeof(FluxVM));
+    FLUX_DLOG("Initializing FluxVM %p", vm);
 
     vm->stack = flux_stack_init();
     vm->vars = malloc(sizeof(flux_object*[FLUX_MAX_VARS]));
@@ -15,7 +15,7 @@ flux_vm* flux_vm_init() {
     return vm;
 }
 
-void flux_vm_free(flux_vm* vm) {
+void flux_vm_free(FluxVM* vm) {
     if(vm == NULL)
         return;
 
@@ -24,12 +24,12 @@ void flux_vm_free(flux_vm* vm) {
     for(int i = 0; i < FLUX_MAX_VARS; i++)
         flux_object_dec_ref(vm->vars[i]);
 
-    FLUX_DLOG("Freeing flux_vm %p", vm);
+    FLUX_DLOG("Freeing FluxVM %p", vm);
     free(vm);
 }
 
 
-void flux_vm_store(flux_vm* vm) {
+void flux_vm_store(FluxVM* vm) {
     flux_object* index_obj = flux_stack_get_noffset(vm->stack, 1);
     flux_object* value_obj = flux_stack_get_noffset(vm->stack, 2);
 
@@ -49,29 +49,29 @@ void flux_vm_store(flux_vm* vm) {
     flux_stack_pop(vm->stack);
 }
 
-void flux_vm_load(flux_vm* vm, unsigned int index) {
+void flux_vm_load(FluxVM* vm, unsigned int index) {
     flux_object* obj = vm->vars[index];
     flux_stack_push(vm->stack, obj);
 }
-void flux_vm_ipush(flux_vm* vm, int value) {
+void flux_vm_ipush(FluxVM* vm, int value) {
     flux_stack_ipush(vm->stack, value);
 }
-void flux_vm_iadd(flux_vm* vm) {
+void flux_vm_iadd(FluxVM* vm) {
     flux_stack_iadd(vm->stack);
 }
-void flux_vm_print(flux_vm* vm) {
+void flux_vm_print(FluxVM* vm) {
     flux_stack_print(vm->stack);
 }
 
-void flux_vm_pop(flux_vm* vm) {
+void flux_vm_pop(FluxVM* vm) {
     flux_stack_pop(vm->stack);
 }
 
-void flux_vm_push(flux_vm* vm, flux_object* obj) {
+void flux_vm_push(FluxVM* vm, flux_object* obj) {
     flux_stack_push(vm->stack, obj);
 }
 
-void flux_vm_itod(flux_vm* vm) {
+void flux_vm_itod(FluxVM* vm) {
     flux_object* integer_obj = flux_stack_get_noffset(vm->stack, 1);
     if(integer_obj == NULL) {
         FLUX_ELOG("Tried converting integer to double but stack is empty");
@@ -91,7 +91,7 @@ void flux_vm_itod(flux_vm* vm) {
     }
 }
 
-void flux_vm_execute(flux_vm* vm, flux_code* code) {
+void flux_vm_execute(FluxVM* vm, flux_code* code) {
 
     int current_command_index = 0;
 
