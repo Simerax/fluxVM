@@ -38,7 +38,7 @@ void flux_code_free(flux_code* code) {
 
 int flux_code_convert_to_flux_commands(char* bytes, int length, flux_command*** commands) {
 
-    flux_list* list = flux_list_init(sizeof(flux_command*));
+    FluxList* list = flux_list_init(sizeof(flux_command*));
 
     int number_of_commands = 0;
 

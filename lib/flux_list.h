@@ -2,20 +2,20 @@
 #define FLUX_LIST_H
 #include<stddef.h>
 
-typedef struct flux_list {
+typedef struct FluxList {
     size_t element_size;
     void* element;
-    struct flux_list* next;
-} flux_list;
+    struct FluxList* next;
+} FluxList;
 
-flux_list* flux_list_init(size_t element_size);
-void flux_list_free(flux_list*);
+FluxList* flux_list_init(size_t element_size);
+void flux_list_free(FluxList*);
 
-void flux_list_add(flux_list*, void* element);
+void flux_list_add(FluxList*, void* element);
 
-void** flux_list_to_array(flux_list*);
+void** flux_list_to_array(FluxList*);
 
-size_t flux_list_length(flux_list*);
+size_t flux_list_length(FluxList*);
 
 
 #endif //FLUX_LIST_H

@@ -4,7 +4,7 @@
 
 START_TEST(test_list)
 {
-    flux_list* l = flux_list_init(sizeof(int*));
+    FluxList* l = flux_list_init(sizeof(int*));
 
     int num_a = 2;
     int num_b = 3;

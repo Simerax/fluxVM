@@ -4,15 +4,15 @@
 #include "flux_log.h"
 
 
-flux_list* flux_list_init(size_t element_size) {
-    flux_list* l = malloc(sizeof(flux_list));
+FluxList* flux_list_init(size_t element_size) {
+    FluxList* l = malloc(sizeof(FluxList));
     l->element_size = element_size;
     l->next = NULL;
     l->element = NULL;
     return l;
 }
 
-void flux_list_free(flux_list* l) {
+void flux_list_free(FluxList* l) {
     if(l == NULL)
         return;
 
@@ -24,8 +24,8 @@ void flux_list_free(flux_list* l) {
 }
 
 
-void flux_list_add(flux_list* l, void* element) {
-    flux_list* current_element = l;
+void flux_list_add(FluxList* l, void* element) {
+    FluxList* current_element = l;
 
     while(current_element->element != NULL && current_element->next != NULL) {
         current_element = current_element->next;
@@ -42,11 +42,11 @@ void flux_list_add(flux_list* l, void* element) {
 }
 
 
-void** flux_list_to_array(flux_list* l) {
+void** flux_list_to_array(FluxList* l) {
     size_t length = flux_list_length(l);
     void** elements = malloc(l->element_size * length);
 
-    flux_list* current_element = l;
+    FluxList* current_element = l;
     int i = 0;
     while(current_element != NULL && current_element->element!= NULL) {
         *(elements + (i * current_element->element_size))  = current_element->element;
@@ -58,12 +58,12 @@ void** flux_list_to_array(flux_list* l) {
 }
 
 
-size_t flux_list_length(flux_list* l) {
+size_t flux_list_length(FluxList* l) {
     if(l == NULL || l->element == NULL)
         return 0;
 
     size_t length = 0;
-    flux_list* current_element = l;
+    FluxList* current_element = l;
     while(current_element != NULL && current_element->element != NULL) {
         length++;
         current_element = current_element->next;
