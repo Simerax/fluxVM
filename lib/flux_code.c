@@ -1,16 +1,19 @@
 #include "flux_code.h"
 #include<string.h> // memcpy
 #include<stdlib.h> // malloc
+#include<endian.h>
 #include"flux_list.h"
+#include"flux_log.h"
 
 
-//#if __BTYE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#if __BYTE_ORDER  == __LITTLE_ENDIAN
 #define INT32_TO_SYSTEM_ENDIANNESS(x) (x<<24) | ((x&0xf00)<<8) | ((x>>8)&0xff00) | ((x>>24)&0xff)
-//#elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-//#define INT32_TO_SYSTEM_ENDIANNESS(x) x
-//#else 
-//#error System Endianness not supported
-//#endif 
+#elif __BYTE_ORDER == __BIG_ENDIAN
+#define INT32_TO_SYSTEM_ENDIANNESS(x) x
+#elif __BYTE_ORDER == __PDP_ENDIAN
+#error "System Endianness not supported"
+#endif
+
 
 FluxCode* flux_code_init(char* bytes, int length) {
 
