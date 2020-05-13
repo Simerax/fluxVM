@@ -9,11 +9,11 @@ typedef enum {
     flux_stack_error_overflow, // Stack Index is greater STACK_SIZE
     flux_stack_error_underflow, // Stack Index is smaller 0
     flux_stack_error_underflow_access, // Tried to access a Stack Element at index smaller 0
-} flux_stack_error;
+} FluxStackError;
 
 typedef struct {
     int index; // not unsigned because we might need to detect an underflow
-    flux_stack_error error;
+    FluxStackError error;
     flux_object** objects;
 } FluxStack;
 
@@ -26,8 +26,8 @@ void flux_stack_push(FluxStack*, flux_object*);
 void flux_stack_ipush(FluxStack*, int value);
 void flux_stack_iadd(FluxStack*);
 
-void flux_stack_set_error(FluxStack*, flux_stack_error);
-flux_stack_error flux_stack_get_error(FluxStack*);
+void flux_stack_set_error(FluxStack*, FluxStackError);
+FluxStackError flux_stack_get_error(FluxStack*);
 void flux_stack_reset_error(FluxStack*);
 
 

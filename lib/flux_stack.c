@@ -94,12 +94,12 @@ void flux_stack_print(FluxStack* stack) {
     }
 }
 
-void flux_stack_set_error(FluxStack* stack, flux_stack_error err) {
+void flux_stack_set_error(FluxStack* stack, FluxStackError err) {
     FLUX_ELOG("flux_stack_set_error: %d", err);
     stack->error = err;
 }
 
-flux_stack_error flux_stack_get_error(FluxStack* stack) {
+FluxStackError flux_stack_get_error(FluxStack* stack) {
     return stack->error;
 }
 
