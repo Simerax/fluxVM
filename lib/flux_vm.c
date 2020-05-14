@@ -72,6 +72,10 @@ void flux_vm_print(FluxVM* vm) {
     flux_stack_print(vm->stack);
 }
 
+void flux_vm_inspect(FluxVM* vm) {
+    flux_stack_inspect(vm->stack);
+}
+
 void flux_vm_pop(FluxVM* vm) {
     flux_stack_pop(vm->stack);
 }
@@ -139,6 +143,8 @@ void flux_vm_execute(FluxVM* vm, FluxCode* code) {
             case STORE: flux_vm_store(vm);
             case PRINT: flux_vm_print(vm);
                         break;
+            case INSPECT: flux_vm_inspect(vm);
+                          break;
             case JSR: flux_vm_ipush(vm, vm->instruction_index);
                       flux_vm_jmp(vm, cmd->parameters[0]);
                       did_jump = true;

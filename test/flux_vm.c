@@ -396,6 +396,46 @@ START_TEST (test_bytecode_CMP_JE)
 }
 END_TEST
 
+START_TEST (test_bytecode_INSPECT)
+{
+    FluxVM* vm = flux_vm_init();
+
+    char bytecode[] = {
+
+        IPUSH,
+        0,
+        0,
+        0,
+        25,
+
+        INSPECT,
+    };
+    // after this code there should still be 25 on top of the stack
+
+    FluxCode* code = flux_code_init(bytecode, sizeof(bytecode));
+
+    ck_assert_int_eq(code->number_of_commands, 2);
+
+    FluxCommand** commands = code->commands;
+    
+    ck_assert_ptr_nonnull(commands);
+    ck_assert_ptr_nonnull(commands[0]);
+    ck_assert_ptr_nonnull(commands[1]);
+
+    ck_assert_int_eq(commands[0]->instruction, IPUSH);
+    ck_assert_int_eq(commands[1]->instruction, INSPECT);
+
+
+    flux_vm_execute(vm, code);
+    FluxObject* result = flux_stack_get_noffset(vm->stack, 1);
+
+    ck_assert_int_eq(flux_object_get_int_value(result), 25);
+
+    flux_code_free(code);
+    flux_vm_free(vm);
+}
+END_TEST
+
 TEST_HELPER_START(flux_vm);
 
 TEST_HELPER_ADD_TEST(test_stack_integer_addition);
@@ -406,5 +446,6 @@ TEST_HELPER_ADD_TEST(test_bytecode_STORE);
 TEST_HELPER_ADD_TEST(test_bytecode_STORE_and_LOAD);
 TEST_HELPER_ADD_TEST(test_bytecode_JMP);
 TEST_HELPER_ADD_TEST(test_bytecode_CMP_JE);
+TEST_HELPER_ADD_TEST(test_bytecode_INSPECT);
 
 TEST_HELPER_END_TEST

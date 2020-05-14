@@ -94,6 +94,16 @@ void flux_stack_print(FluxStack* stack) {
     }
 }
 
+void flux_stack_inspect(FluxStack* stack) {
+    FluxObject* obj = flux_stack_get_noffset(stack, 1);
+
+    if(obj != NULL) {
+        flux_object_inspect(obj);
+    } else {
+        FLUX_ELOG("Tried to print Stack Object but Object is NULL!");
+    }
+}
+
 void flux_stack_set_error(FluxStack* stack, FluxStackError err) {
     FLUX_ELOG("flux_stack_set_error: %d", err);
     stack->error = err;

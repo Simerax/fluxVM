@@ -15,7 +15,8 @@ typedef enum {
     JE,
     JL,
     JGE,
-    JLE
+    JLE,
+    INSPECT,
 
 } FluxInstruction;
 

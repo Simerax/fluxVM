@@ -35,6 +35,7 @@ void flux_stack_reset_error(FluxStack*);
 FluxObject* flux_stack_get_noffset(FluxStack*, int offset);
 
 void flux_stack_print(FluxStack*);
+void flux_stack_inspect(FluxStack*);
 
 
 

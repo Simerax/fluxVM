@@ -29,6 +29,7 @@ void flux_object_dec_ref(FluxObject*);
 FluxObject* flux_object_iinit(int);
 
 void flux_object_print(FluxObject*);
+void flux_object_inspect(FluxObject*);
 
 bool flux_object_itod(FluxObject*);
 FluxObject* flux_object_copy(FluxObject*);

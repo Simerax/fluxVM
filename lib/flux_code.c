@@ -80,8 +80,9 @@ int flux_code_convert_to_flux_commands(char* bytes, int length, FluxCommand*** c
             flux_list_add(list, flux_command_init(STORE, NULL, 0));
             number_of_commands++;
         }
-        else if (bytes[i] == PRINT) {
-            FluxCommand* c = flux_command_init(PRINT, NULL, 0);
+        else if (bytes[i] == PRINT || bytes[i] == INSPECT) {
+            FluxInstruction instruction = bytes[i];
+            FluxCommand* c = flux_command_init(instruction, NULL, 0);
             flux_list_add(list, c);
             number_of_commands++;
         }

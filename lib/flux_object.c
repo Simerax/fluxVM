@@ -52,6 +52,10 @@ void flux_object_free(FluxObject* obj) {
     free(obj);
 }
 
+void flux_object_inspect(FluxObject* obj) {
+    flux_object_print(obj);
+}
+
 void flux_object_print(FluxObject* obj) {
     if(obj == NULL) {
         FLUX_ELOG("Tried printing NULL Object");

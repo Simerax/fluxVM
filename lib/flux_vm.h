@@ -20,6 +20,7 @@ FluxVM* flux_vm_init();
 void flux_vm_free(FluxVM*);
 
 void flux_vm_print(FluxVM*);
+void flux_vm_inspect(FluxVM*);
 
 void flux_vm_store(FluxVM*);
 void flux_vm_load(FluxVM*);
