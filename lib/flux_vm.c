@@ -1,4 +1,5 @@
 #include"flux_vm.h"
+#include "flux_cmp_result.h"
 #include"flux_log.h"
 #include "flux_object.h"
 #include"flux_stack.h"
@@ -103,6 +104,17 @@ void flux_vm_jmp(FluxVM* vm, FluxObject* address) {
     vm->instruction_index = flux_object_get_int_value(address);
 }
 
+bool flux_vm_je(FluxVM* vm, FluxObject* address) {
+
+    if(vm->cmp_flag == EQUAL) {
+        vm->instruction_index = flux_object_get_int_value(address);
+        vm->cmp_flag = NONE;
+        return true;
+    } else {
+        return false;
+    }
+}
+
 void flux_vm_execute(FluxVM* vm, FluxCode* code) {
 
     vm->instruction_index = 0;
@@ -131,6 +143,13 @@ void flux_vm_execute(FluxVM* vm, FluxCode* code) {
                       flux_vm_jmp(vm, cmd->parameters[0]);
                       did_jump = true;
                       break;
+            case CMP: flux_vm_cmp(vm);
+                      break;
+            case JE: if(flux_vm_je(vm, cmd->parameters[0]))
+                         did_jump = true;
+                     break;
+                     
+                     break;
             default: FLUX_ELOG("Unknown Instruction %d", cmd->instruction);
                      break;
         }
@@ -140,5 +159,15 @@ void flux_vm_execute(FluxVM* vm, FluxCode* code) {
         else
             vm->instruction_index++;
     }
+}
+
+void flux_vm_cmp(FluxVM* vm) {
+    FluxObject* a = flux_stack_get_noffset(vm->stack, 1);
+    FluxObject* b = flux_stack_get_noffset(vm->stack, 2);
+
+    vm->cmp_flag = flux_object_cmp(a, b);
+
+    flux_stack_pop(vm->stack);
+    flux_stack_pop(vm->stack);
 }
 

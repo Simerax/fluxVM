@@ -9,7 +9,14 @@ typedef enum {
     LOAD,
     STORE,
     PRINT,
-    JMP
+    JMP,
+    CMP,
+    JG,
+    JE,
+    JL,
+    JGE,
+    JLE
+
 } FluxInstruction;
 
 #endif //FLUX_INSTRUCTION_H

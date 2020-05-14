@@ -3,6 +3,7 @@
 #include<stdlib.h> // malloc
 #include<endian.h>
 #include "flux_command.h"
+#include "flux_instruction.h"
 #include"flux_list.h"
 #include"flux_log.h"
 #include "flux_object.h"
@@ -96,14 +97,19 @@ int flux_code_convert_to_flux_commands(char* bytes, int length, FluxCommand*** c
             flux_list_add(list, ipush_command);
             number_of_commands++;
         }
-        else if (bytes[i] == JMP) {
+        else if (bytes[i] == JMP || bytes[i] == JE) {
+            FluxInstruction instruction = bytes[i];
             int number = read_integer((bytes + i + 1));
             i += 4;
             FluxObject* obj = flux_object_iinit(number);
             FluxObject** param = malloc(sizeof(FluxObject*));
             param[0] = obj;
-            FluxCommand* jmp = flux_command_init(JMP, param, 1);
+            FluxCommand* jmp = flux_command_init(instruction, param, 1);
             flux_list_add(list, jmp);
+            number_of_commands++;
+        }
+        else if (bytes[i] == CMP) {
+            flux_list_add(list, flux_command_init(CMP, NULL, 0));
             number_of_commands++;
         }
         else {

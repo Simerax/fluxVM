@@ -1,6 +1,7 @@
 #ifndef FLUX_OBJECT_H
 #define FLUX_OBJECT_H
 
+#include "flux_cmp_result.h"
 #include<stddef.h> // size_t
 #include<stdbool.h> // bool
 
@@ -37,5 +38,7 @@ double flux_object_get_double_value(FluxObject*);
 
 
 FluxObjectType flux_object_get_type(FluxObject*);
+
+FluxCmpResult flux_object_cmp(FluxObject*, FluxObject*);
 
 #endif //FLUX_OBJECT_H

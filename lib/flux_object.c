@@ -1,5 +1,7 @@
 #include"flux_object.h"
+#include "flux_cmp_result.h"
 #include"flux_log.h"
+#include "flux_vm.h"
 #include<stdlib.h>
 #include<string.h> // memcpy
 
@@ -108,4 +110,26 @@ double flux_object_get_double_value(FluxObject* obj) {
 
 FluxObjectType flux_object_get_type(FluxObject* obj) {
     return obj->type;
+}
+
+FluxCmpResult flux_object_cmp(FluxObject* a, FluxObject* b) {
+
+    if(a == NULL || b == NULL)
+        return NONE;
+
+    if(flux_object_get_type(a) == flux_object_get_type(b)) {
+        FluxObjectType type = flux_object_get_type(a);
+        if(type == Integer) {
+
+            int result = flux_object_get_int_value(a) - flux_object_get_int_value(b);
+            if(result < 0) {
+                return LESS;
+            } else if (result == 0) {
+                return EQUAL;
+            } else {
+                return GREATER;
+            }
+        }
+    }
+    return EQUAL; // FIXME: Well this is just wrong but rn its not a problem
 }
