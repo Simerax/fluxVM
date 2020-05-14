@@ -18,7 +18,7 @@ void flux_vm_free(FluxVM*);
 void flux_vm_print(FluxVM*);
 
 void flux_vm_store(FluxVM*);
-void flux_vm_load(FluxVM*, unsigned int index);
+void flux_vm_load(FluxVM*);
 
 void flux_vm_ipush(FluxVM*, int value);
 void flux_vm_push(FluxVM*, FluxObject*);

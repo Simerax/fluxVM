@@ -1,5 +1,6 @@
 #include"check.h"
 #include "flux_object.h"
+#include "flux_stack.h"
 #include"test_helper.h"
 #include"flux_vm.h"
 #include"flux_log.h"
@@ -29,7 +30,8 @@ START_TEST (test_adding_int_variables)
     flux_vm_ipush(vm, 354);
     flux_vm_ipush(vm, 0);
     flux_vm_store(vm);
-    flux_vm_load(vm, 0);
+    flux_vm_ipush(vm, 0);
+    flux_vm_load(vm);
 
     flux_vm_ipush(vm, 6);
 
@@ -193,6 +195,70 @@ START_TEST (test_bytecode_STORE)
 }
 END_TEST
 
+START_TEST (test_bytecode_STORE_and_LOAD)
+{
+    FluxVM* vm = flux_vm_init();
+
+    char bytecode[] = {
+        IPUSH,
+
+        // Integer 20 in big endian notation 4 byte
+        0,
+        0,
+        0,
+        33,
+
+        IPUSH,
+
+        0,
+        0,
+        0,
+        0,
+
+        STORE,
+
+        IPUSH,
+
+        0,
+        0,
+        0,
+        0,
+
+        LOAD,
+    };
+
+    FluxCode* code = flux_code_init(bytecode, sizeof(bytecode));
+
+    ck_assert_int_eq(code->number_of_commands, 5);
+
+    FluxCommand** commands = code->commands;
+    
+    ck_assert_ptr_nonnull(commands);
+    ck_assert_ptr_nonnull(commands[0]);
+    ck_assert_ptr_nonnull(commands[1]);
+    ck_assert_ptr_nonnull(commands[2]);
+    ck_assert_ptr_nonnull(commands[3]);
+    ck_assert_ptr_nonnull(commands[4]);
+
+    ck_assert_int_eq(commands[0]->instruction, IPUSH);
+    ck_assert_int_eq(commands[1]->instruction, IPUSH);
+    ck_assert_int_eq(commands[2]->instruction, STORE);
+    ck_assert_int_eq(commands[3]->instruction, IPUSH);
+    ck_assert_int_eq(commands[4]->instruction, LOAD);
+
+
+    flux_vm_execute(vm, code);
+
+    FluxObject* result = flux_stack_get_noffset(vm->stack, 1);
+
+
+    ck_assert_int_eq(flux_object_get_int_value(result), 33);
+
+    flux_code_free(code);
+    flux_vm_free(vm);
+}
+END_TEST
+
 TEST_HELPER_START(flux_vm);
 
 TEST_HELPER_ADD_TEST(test_stack_integer_addition);
@@ -200,5 +266,6 @@ TEST_HELPER_ADD_TEST(test_adding_int_variables);
 TEST_HELPER_ADD_TEST(test_running_bytecode);
 TEST_HELPER_ADD_TEST(test_bytecode_ITOD);
 TEST_HELPER_ADD_TEST(test_bytecode_STORE);
+TEST_HELPER_ADD_TEST(test_bytecode_STORE_and_LOAD);
 
 TEST_HELPER_END_TEST

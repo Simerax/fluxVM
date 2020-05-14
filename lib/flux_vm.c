@@ -1,5 +1,6 @@
 #include"flux_vm.h"
 #include"flux_log.h"
+#include "flux_object.h"
 #include"flux_stack.h"
 
 #include<stdlib.h>
@@ -52,7 +53,10 @@ void flux_vm_store(FluxVM* vm) {
     flux_stack_pop(vm->stack);
 }
 
-void flux_vm_load(FluxVM* vm, unsigned int index) {
+void flux_vm_load(FluxVM* vm) {
+    FluxObject* index_obj = flux_stack_get_noffset(vm->stack, 1);
+
+    int index = flux_object_get_int_value(index_obj);
     FluxObject* obj = vm->vars[index];
     flux_stack_push(vm->stack, obj);
 }
@@ -112,7 +116,7 @@ void flux_vm_execute(FluxVM* vm, FluxCode* code) {
                        break;
             case POP: flux_vm_pop(vm);
                       break;
-            case LOAD: flux_vm_load(vm, flux_object_get_int_value(cmd->parameters[0]));
+            case LOAD: flux_vm_load(vm);
                        break;
             case STORE: flux_vm_store(vm);
             case PRINT: flux_vm_print(vm);
