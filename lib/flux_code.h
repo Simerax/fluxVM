@@ -16,4 +16,6 @@ size_t flux_code_length(FluxCode*);
 char* flux_code_code_ptr(FluxCode*);
 int flux_code_convert_to_flux_commands(char* bytes, int length, FluxCommand*** commands);
 
+int read_integer(char*);
+
 #endif //FLUX_CODE_H

@@ -12,6 +12,7 @@ FluxVM* flux_vm_init() {
 
     vm->stack = flux_stack_init();
     vm->vars = malloc(sizeof(FluxObject*[FLUX_MAX_VARS]));
+    vm->instruction_index = 0;
     for(int i = 0; i < FLUX_MAX_VARS; i++)
         vm->vars[i] = NULL;
 
@@ -98,13 +99,18 @@ void flux_vm_itod(FluxVM* vm) {
     }
 }
 
+void flux_vm_jmp(FluxVM* vm, FluxObject* address) {
+    vm->instruction_index = flux_object_get_int_value(address);
+}
+
 void flux_vm_execute(FluxVM* vm, FluxCode* code) {
 
-    int current_command_index = 0;
+    vm->instruction_index = 0;
 
-    while(current_command_index < code->number_of_commands) {
-        FluxCommand* cmd = code->commands[current_command_index];
-        current_command_index++;
+    while(vm->instruction_index < code->number_of_commands) {
+        FluxCommand* cmd = code->commands[vm->instruction_index];
+
+        bool did_jump = false;
 
 
         switch(cmd->instruction) {
@@ -121,9 +127,18 @@ void flux_vm_execute(FluxVM* vm, FluxCode* code) {
             case STORE: flux_vm_store(vm);
             case PRINT: flux_vm_print(vm);
                         break;
+            case JMP: flux_vm_ipush(vm, vm->instruction_index);
+                      flux_vm_jmp(vm, cmd->parameters[0]);
+                      did_jump = true;
+                      break;
             default: FLUX_ELOG("Unknown Instruction %d", cmd->instruction);
                      break;
         }
+
+        if(did_jump)
+            did_jump = false;
+        else
+            vm->instruction_index++;
     }
 }
 

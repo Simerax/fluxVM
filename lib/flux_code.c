@@ -2,8 +2,10 @@
 #include<string.h> // memcpy
 #include<stdlib.h> // malloc
 #include<endian.h>
+#include "flux_command.h"
 #include"flux_list.h"
 #include"flux_log.h"
+#include "flux_object.h"
 
 
 #if __BYTE_ORDER  == __LITTLE_ENDIAN
@@ -94,6 +96,16 @@ int flux_code_convert_to_flux_commands(char* bytes, int length, FluxCommand*** c
             flux_list_add(list, ipush_command);
             number_of_commands++;
         }
+        else if (bytes[i] == JMP) {
+            int number = read_integer((bytes + i + 1));
+            i += 4;
+            FluxObject* obj = flux_object_iinit(number);
+            FluxObject** param = malloc(sizeof(FluxObject*));
+            param[0] = obj;
+            FluxCommand* jmp = flux_command_init(JMP, param, 1);
+            flux_list_add(list, jmp);
+            number_of_commands++;
+        }
         else {
             FLUX_WLOG("Unknown Command '%d' in bytecode at byte position %d -- Command is being ignored", bytes[i], i);
         }
@@ -103,4 +115,12 @@ int flux_code_convert_to_flux_commands(char* bytes, int length, FluxCommand*** c
     *commands = (FluxCommand**)flux_list_to_array(list);
     
     return number_of_commands;
+}
+
+
+int read_integer(char* buffer) {
+    int number;
+    memcpy(&number, buffer, 4);
+    number = INT32_TO_SYSTEM_ENDIANNESS(number);
+    return number;
 }

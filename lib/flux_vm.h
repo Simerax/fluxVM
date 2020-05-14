@@ -9,6 +9,7 @@
 typedef struct {
     FluxStack* stack;
     FluxObject** vars;
+    int instruction_index;
 } FluxVM;
 
 
@@ -28,6 +29,8 @@ void flux_vm_pop(FluxVM*);
 void flux_vm_itod(FluxVM*);
 
 void flux_vm_execute(FluxVM*, FluxCode*);
+
+void flux_vm_jmp(FluxVM*, FluxObject*);
 
 
 #endif //FLUX_VM_H

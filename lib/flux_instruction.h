@@ -8,7 +8,8 @@ typedef enum {
     POP,
     LOAD,
     STORE,
-    PRINT
+    PRINT,
+    JMP
 } FluxInstruction;
 
 #endif //FLUX_INSTRUCTION_H
