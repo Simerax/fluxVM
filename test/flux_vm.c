@@ -265,8 +265,8 @@ START_TEST (test_bytecode_JMP)
 
     char bytecode[] = {
 
-        // JMP should jump over the next IPUSH therefore there should be 9 on the stack and nothing else
-        JMP, // 0
+        // JSR should jump over the next IPUSH therefore there should be 9 on the stack and nothing else
+        JSR, // 0
 
         0,
         0,
@@ -299,7 +299,7 @@ START_TEST (test_bytecode_JMP)
     ck_assert_ptr_nonnull(commands[1]);
     ck_assert_ptr_nonnull(commands[2]);
 
-    ck_assert_int_eq(commands[0]->instruction, JMP);
+    ck_assert_int_eq(commands[0]->instruction, JSR);
     ck_assert_int_eq(commands[1]->instruction, IPUSH);
     ck_assert_int_eq(commands[2]->instruction, IPUSH);
 

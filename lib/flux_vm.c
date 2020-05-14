@@ -139,7 +139,7 @@ void flux_vm_execute(FluxVM* vm, FluxCode* code) {
             case STORE: flux_vm_store(vm);
             case PRINT: flux_vm_print(vm);
                         break;
-            case JMP: flux_vm_ipush(vm, vm->instruction_index);
+            case JSR: flux_vm_ipush(vm, vm->instruction_index);
                       flux_vm_jmp(vm, cmd->parameters[0]);
                       did_jump = true;
                       break;

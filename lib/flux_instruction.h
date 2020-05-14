@@ -9,7 +9,7 @@ typedef enum {
     LOAD,
     STORE,
     PRINT,
-    JMP,
+    JSR,
     CMP,
     JG,
     JE,
