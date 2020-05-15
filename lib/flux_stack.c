@@ -56,6 +56,7 @@ void flux_stack_push(FluxStack* stack, FluxObject* obj) {
         return;
     }
     flux_object_inc_ref(obj);
+    FLUX_DLOG("Pushed Obj %p - Value: %d", obj, flux_object_get_int_value(obj));
     stack->objects[stack->index] = obj;
     stack->index++;
 }

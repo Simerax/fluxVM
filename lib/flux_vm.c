@@ -48,6 +48,8 @@ void flux_vm_store(FluxVM* vm) {
 
     int index = *((int*)index_obj->value);
 
+    FLUX_DLOG("STORING Variable %p at index: %d (index_obj: %p)", value_obj, index, index_obj);
+
     flux_object_dec_ref(vm->vars[index]);
     vm->vars[index] = value_obj;
 
@@ -60,6 +62,7 @@ void flux_vm_load(FluxVM* vm) {
 
     int index = flux_object_get_int_value(index_obj);
     FluxObject* obj = vm->vars[index];
+    flux_vm_pop(vm); // get rid of the index_obj
     flux_stack_push(vm->stack, obj);
 }
 void flux_vm_ipush(FluxVM* vm, int value) {
@@ -106,12 +109,26 @@ void flux_vm_itod(FluxVM* vm) {
 
 void flux_vm_jmp(FluxVM* vm, FluxObject* address) {
     vm->instruction_index = flux_object_get_int_value(address);
+    FLUX_DLOG("JMP to index %d", vm->instruction_index);
 }
 
 bool flux_vm_je(FluxVM* vm, FluxObject* address) {
 
     if(vm->cmp_flag == EQUAL) {
         vm->instruction_index = flux_object_get_int_value(address);
+        FLUX_DLOG("JE to index %d", vm->instruction_index);
+        vm->cmp_flag = NONE;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool flux_vm_jl(FluxVM* vm, FluxObject* address) {
+
+    if(vm->cmp_flag == LESS) {
+        vm->instruction_index = flux_object_get_int_value(address);
+        FLUX_DLOG("JL to index %d", vm->instruction_index);
         vm->cmp_flag = NONE;
         return true;
     } else {
@@ -141,6 +158,7 @@ void flux_vm_execute(FluxVM* vm, FluxCode* code) {
             case LOAD: flux_vm_load(vm);
                        break;
             case STORE: flux_vm_store(vm);
+                        break;
             case PRINT: flux_vm_print(vm);
                         break;
             case INSPECT: flux_vm_inspect(vm);
@@ -152,6 +170,9 @@ void flux_vm_execute(FluxVM* vm, FluxCode* code) {
             case CMP: flux_vm_cmp(vm);
                       break;
             case JE: if(flux_vm_je(vm, cmd->parameters[0]))
+                         did_jump = true;
+                     break;
+            case JL: if(flux_vm_jl(vm, cmd->parameters[0]))
                          did_jump = true;
                      break;
                      
@@ -168,10 +189,11 @@ void flux_vm_execute(FluxVM* vm, FluxCode* code) {
 }
 
 void flux_vm_cmp(FluxVM* vm) {
-    FluxObject* a = flux_stack_get_noffset(vm->stack, 1);
-    FluxObject* b = flux_stack_get_noffset(vm->stack, 2);
+    FluxObject* a = flux_stack_get_noffset(vm->stack, 2);
+    FluxObject* b = flux_stack_get_noffset(vm->stack, 1);
 
     vm->cmp_flag = flux_object_cmp(a, b);
+    FLUX_DLOG("CMP result %d", vm->cmp_flag);
 
     flux_stack_pop(vm->stack);
     flux_stack_pop(vm->stack);
