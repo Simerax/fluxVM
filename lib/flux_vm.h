@@ -38,6 +38,7 @@ void flux_vm_jmp(FluxVM*, FluxObject*);
 bool flux_vm_je(FluxVM*, FluxObject*);
 bool flux_vm_jl(FluxVM*, FluxObject*);
 bool flux_vm_jle(FluxVM*, FluxObject*);
+bool flux_vm_jge(FluxVM*, FluxObject*);
 
 void flux_vm_cmp(FluxVM*);
 

@@ -148,6 +148,18 @@ bool flux_vm_jle(FluxVM* vm, FluxObject* address) {
     }
 }
 
+bool flux_vm_jge(FluxVM* vm, FluxObject* address) {
+
+    if(vm->cmp_flag == GREATER || vm->cmp_flag == EQUAL) {
+        vm->instruction_index = flux_object_get_int_value(address);
+        FLUX_DLOG("JLE to index %d", vm->instruction_index);
+        vm->cmp_flag = NONE;
+        return true;
+    } else {
+        return false;
+    }
+}
+
 void flux_vm_execute(FluxVM* vm, FluxCode* code) {
 
     vm->instruction_index = 0;
@@ -188,6 +200,9 @@ void flux_vm_execute(FluxVM* vm, FluxCode* code) {
                          did_jump = true;
                      break;
             case JLE: if(flux_vm_jle(vm, cmd->parameters[0]))
+                          did_jump = true;
+                      break;
+            case JGE: if(flux_vm_jge(vm, cmd->parameters[0]))
                           did_jump = true;
                       break;
                      
