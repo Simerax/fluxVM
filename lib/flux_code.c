@@ -98,7 +98,7 @@ int flux_code_convert_to_flux_commands(char* bytes, int length, FluxCommand*** c
             flux_list_add(list, ipush_command);
             number_of_commands++;
         }
-        else if (bytes[i] == JSR || bytes[i] == JE || bytes[i] == JL) {
+        else if (bytes[i] == JSR || bytes[i] == JE || bytes[i] == JL || bytes[i] == JLE) {
             FluxInstruction instruction = bytes[i];
             int number = read_integer((bytes + i + 1));
             i += 4;
