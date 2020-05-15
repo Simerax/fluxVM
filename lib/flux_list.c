@@ -49,7 +49,6 @@ void** flux_list_to_array(FluxList* l) {
     FluxList* current_element = l;
     int i = 0;
     while(current_element != NULL && current_element->element!= NULL) {
-        *(elements + (i * current_element->element_size))  = current_element->element;
         elements[i] = current_element->element;
         ++i;
         current_element = current_element->next;
