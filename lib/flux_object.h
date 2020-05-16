@@ -9,6 +9,7 @@
 typedef enum {
     Integer,
     Double,
+    Char,
 
 } FluxObjectType;
 
@@ -27,6 +28,7 @@ void flux_object_dec_ref(FluxObject*);
 
 
 FluxObject* flux_object_iinit(int);
+FluxObject* flux_object_cinit(char);
 
 void flux_object_print(FluxObject*);
 void flux_object_inspect(FluxObject*);
@@ -35,6 +37,7 @@ bool flux_object_itod(FluxObject*);
 FluxObject* flux_object_copy(FluxObject*);
 
 int flux_object_get_int_value(FluxObject*);
+char flux_object_get_char_value(FluxObject*);
 double flux_object_get_double_value(FluxObject*);
 
 

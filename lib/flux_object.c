@@ -23,6 +23,15 @@ FluxObject* flux_object_iinit(int value) {
     return obj;
 }
 
+FluxObject* flux_object_cinit(char value) {
+    FluxObject* obj = flux_object_init();
+    obj->type = Char;
+    obj->value_size = sizeof(char);
+    obj->value = malloc(obj->value_size);
+    *((char*)obj->value) = value;
+    return obj;
+}
+
 void flux_object_inc_ref(FluxObject* obj) {
     if(obj == NULL)
         return;
@@ -66,6 +75,8 @@ void flux_object_print(FluxObject* obj) {
         case Integer: printf("%d\n", *((int*)obj->value));
                       break;
         case Double:  printf("%f\n", *((double*)obj->value));
+                      break;
+        case Char:    printf("%c\n", *((char*)obj->value));
                       break;
         default: printf("Tried printing of unsupported obj type! %p\n", obj);
     }
@@ -112,6 +123,10 @@ double flux_object_get_double_value(FluxObject* obj) {
     return *((double*)obj->value);
 }
 
+char flux_object_get_char_value(FluxObject* obj) {
+    return *((char*)obj->value);
+}
+
 FluxObjectType flux_object_get_type(FluxObject* obj) {
     return obj->type;
 }
@@ -129,6 +144,15 @@ FluxCmpResult flux_object_cmp(FluxObject* a, FluxObject* b) {
             if(result < 0) {
                 return LESS;
             } else if (result == 0) {
+                return EQUAL;
+            } else {
+                return GREATER;
+            }
+        } else if (type == Char) {
+            char result = flux_object_get_char_value(a) - flux_object_get_char_value(b);
+            if(result < 0) {
+                return LESS;
+            } else if(result == 0) {
                 return EQUAL;
             } else {
                 return GREATER;

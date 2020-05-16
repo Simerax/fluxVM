@@ -1,4 +1,5 @@
 #include"check.h"
+#include "flux_cmp_result.h"
 #include"test_helper.h"
 #include"flux_object.h"
 
@@ -30,10 +31,47 @@ START_TEST (test_integer_to_double_flux_object)
 }
 END_TEST
 
+START_TEST (test_char_flux_object)
+{
+    FluxObject* obj = flux_object_cinit('a');
+
+    ck_assert_int_eq(flux_object_get_type(obj), Char);
+    ck_assert_int_eq(flux_object_get_char_value(obj), 'a');
+
+    flux_object_free(obj);
+}
+END_TEST
+
+START_TEST (test_compare_char_flux_object)
+{
+    FluxObject* obj_a = flux_object_cinit('a');
+    FluxObject* obj_b = flux_object_cinit('a');
+
+    ck_assert_int_eq(flux_object_get_char_value(obj_a), flux_object_get_char_value(obj_b));
+
+    FluxCmpResult result = flux_object_cmp(obj_a, obj_b);
+    ck_assert_int_eq(result, EQUAL);
+
+    flux_object_free(obj_a);
+    flux_object_free(obj_b);
+
+    obj_a = flux_object_cinit('a');
+    obj_b = flux_object_cinit('b');
+
+    result = flux_object_cmp(obj_a, obj_b);
+    ck_assert_int_eq(result, LESS);
+
+    flux_object_free(obj_a);
+    flux_object_free(obj_b);
+}
+END_TEST
+
 
 TEST_HELPER_START(flux_object);
 
 TEST_HELPER_ADD_TEST(test_integer_flux_object);
 TEST_HELPER_ADD_TEST(test_integer_to_double_flux_object);
+TEST_HELPER_ADD_TEST(test_char_flux_object);
+TEST_HELPER_ADD_TEST(test_compare_char_flux_object);
 
 TEST_HELPER_END_TEST
