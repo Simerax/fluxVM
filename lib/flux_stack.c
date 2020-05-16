@@ -39,14 +39,8 @@ void flux_stack_pop(FluxStack* stack) {
 }
 
 void flux_stack_ipush(FluxStack* stack, int value) {
-    if(stack->index == FLUX_STACK_SIZE - 1) {
-        FLUX_ELOG("Tried pushing onto full stack %p", stack);
-        flux_stack_set_error(stack, flux_stack_error_overflow);
-        return;
-    }
     FluxObject* integer = flux_object_iinit(value);
-    stack->objects[stack->index] = integer;
-    stack->index++;
+    flux_stack_push(stack, integer);
 }
 
 void flux_stack_push(FluxStack* stack, FluxObject* obj) {
