@@ -1,5 +1,6 @@
 #include"flux_stack.h"
 #include"flux_log.h"
+#include "flux_object.h"
 #include<stdlib.h>
 
 FluxStack* flux_stack_init() {
@@ -36,6 +37,11 @@ void flux_stack_pop(FluxStack* stack) {
     stack->index--;
     flux_object_dec_ref(stack->objects[stack->index]);
     stack->objects[stack->index] = NULL; // make sure we don't do a double free on cleanup
+}
+
+void flux_stack_cpush(FluxStack* stack, char value) {
+    FluxObject* chr = flux_object_cinit(value);
+    flux_stack_push(stack, chr);
 }
 
 void flux_stack_ipush(FluxStack* stack, int value) {
