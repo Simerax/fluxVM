@@ -74,6 +74,19 @@ void flux_stack_iadd(FluxStack* stack) {
     }
 }
 
+void flux_stack_isub(FluxStack* stack) {
+    FluxObject* a = flux_stack_get_noffset(stack, 1);
+    FluxObject* b = flux_stack_get_noffset(stack, 2);
+    if(a != NULL && b != NULL) {
+        int result = *((int*)b->value) - *((int*)a->value);
+        flux_stack_pop(stack);
+        flux_stack_pop(stack);
+        flux_stack_ipush(stack, result);
+    } else {
+        FLUX_ELOG("Cannot do integer add on NULL objects a: %p b: %p", a, b);
+    }
+}
+
 
 FluxObject* flux_stack_get_noffset(FluxStack* stack, int offset) {
     if (stack->index - offset < 0) {

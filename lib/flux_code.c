@@ -72,6 +72,10 @@ int flux_code_convert_to_flux_commands(char* bytes, int length, FluxCommand*** c
             flux_list_add(list, flux_command_init(IADD, NULL, 0));
             number_of_commands++;
         }
+        else if (bytes[i] == ISUB) {
+            flux_list_add(list, flux_command_init(ISUB, NULL, 0));
+            number_of_commands++;
+        }
         else if (bytes[i] == LOAD) {
             flux_list_add(list, flux_command_init(LOAD, NULL, 0));
             number_of_commands++;
