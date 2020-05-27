@@ -41,6 +41,24 @@ START_TEST (test_stack_integer_subtraction)
 }
 END_TEST
 
+START_TEST (test_stack_integer_multiplication)
+{
+    FluxVM* vm = flux_vm_init();
+
+    flux_vm_ipush(vm, 9);
+    flux_vm_ipush(vm, 4);
+
+    flux_vm_imul(vm);
+
+    FluxObject* result = flux_stack_get_noffset(vm->stack, 1);
+
+    ck_assert_int_eq(flux_object_get_type(result), Integer);
+    ck_assert_int_eq(flux_object_get_int_value(result), 36);
+
+    flux_vm_free(vm);
+}
+END_TEST
+
 START_TEST (test_adding_int_variables)
 {
     FluxVM* vm = flux_vm_init();
@@ -770,7 +788,7 @@ START_TEST (test_bytecode_SUBTRACT)
 
         IPUSH,
 
-        // Integer 22 in big endian notation 4 byte
+        // Integer 12 in big endian notation 4 byte
         0,
         0,
         0,
@@ -805,10 +823,62 @@ START_TEST (test_bytecode_SUBTRACT)
 }
 END_TEST
 
+START_TEST (test_bytecode_MULTIPLY)
+{
+    FluxVM* vm = flux_vm_init();
+
+    char bytecode[] = {
+        IPUSH,
+
+        // Integer 5 in big endian notation 4 byte
+        0,
+        0,
+        0,
+        5,
+
+
+        IPUSH,
+
+        // Integer 4 in big endian notation 4 byte
+        0,
+        0,
+        0,
+        4,
+
+        IMUL,
+    };
+
+    FluxCode* code = flux_code_init(bytecode, sizeof(bytecode));
+
+    ck_assert_int_eq(code->number_of_commands, 3);
+
+    FluxCommand** commands = code->commands;
+    
+    ck_assert_ptr_nonnull(commands);
+    ck_assert_ptr_nonnull(commands[0]);
+    ck_assert_ptr_nonnull(commands[1]);
+    ck_assert_ptr_nonnull(commands[2]);
+
+    ck_assert_int_eq(commands[0]->instruction, IPUSH);
+    ck_assert_int_eq(commands[1]->instruction, IPUSH);
+    ck_assert_int_eq(commands[2]->instruction, IMUL);
+
+
+    flux_vm_execute(vm, code);
+    FluxObject* result = flux_stack_get_noffset(vm->stack, 1);
+
+    ck_assert_int_eq(flux_object_get_int_value(result), 20);
+
+    flux_code_free(code);
+    flux_vm_free(vm);
+}
+END_TEST
+
 TEST_HELPER_START(flux_vm);
 
 TEST_HELPER_ADD_TEST(test_stack_integer_addition);
 TEST_HELPER_ADD_TEST(test_stack_integer_subtraction);
+TEST_HELPER_ADD_TEST(test_stack_integer_multiplication);
 TEST_HELPER_ADD_TEST(test_adding_int_variables);
 TEST_HELPER_ADD_TEST(test_running_bytecode);
 TEST_HELPER_ADD_TEST(test_bytecode_ITOD);
@@ -822,5 +892,6 @@ TEST_HELPER_ADD_TEST(test_bytecode_JL_NO_JUMP);
 TEST_HELPER_ADD_TEST(test_bytecode_JLE);
 TEST_HELPER_ADD_TEST(test_bytecode_JGE);
 TEST_HELPER_ADD_TEST(test_bytecode_SUBTRACT);
+TEST_HELPER_ADD_TEST(test_bytecode_MULTIPLY);
 
 TEST_HELPER_END_TEST

@@ -18,6 +18,7 @@ typedef enum {
     JLE,
     INSPECT,
     ISUB,
+    IMUL,
 
 } FluxInstruction;
 

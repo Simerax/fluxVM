@@ -83,7 +83,20 @@ void flux_stack_isub(FluxStack* stack) {
         flux_stack_pop(stack);
         flux_stack_ipush(stack, result);
     } else {
-        FLUX_ELOG("Cannot do integer add on NULL objects a: %p b: %p", a, b);
+        FLUX_ELOG("Cannot do integer sub on NULL objects a: %p b: %p", a, b);
+    }
+}
+
+void flux_stack_imul(FluxStack* stack) {
+    FluxObject* a = flux_stack_get_noffset(stack, 1);
+    FluxObject* b = flux_stack_get_noffset(stack, 2);
+    if(a != NULL && b != NULL) {
+        int result = *((int*)a->value) * *((int*)b->value);
+        flux_stack_pop(stack);
+        flux_stack_pop(stack);
+        flux_stack_ipush(stack, result);
+    } else {
+        FLUX_ELOG("Cannot do integer multiply on NULL objects a: %p b: %p", a, b);
     }
 }
 

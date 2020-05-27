@@ -76,6 +76,10 @@ void flux_vm_isub(FluxVM* vm) {
     flux_stack_isub(vm->stack);
 }
 
+void flux_vm_imul(FluxVM* vm) {
+    flux_stack_imul(vm->stack);
+}
+
 void flux_vm_print(FluxVM* vm) {
     flux_stack_print(vm->stack);
 }
@@ -181,6 +185,8 @@ void flux_vm_execute(FluxVM* vm, FluxCode* code) {
             case IADD: flux_vm_iadd(vm);
                        break;
             case ISUB: flux_vm_isub(vm);
+                       break;
+            case IMUL: flux_vm_imul(vm);
                        break;
             case ITOD: flux_vm_itod(vm);
                        break;
