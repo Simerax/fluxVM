@@ -68,20 +68,8 @@ int flux_code_convert_to_flux_commands(char* bytes, int length, FluxCommand*** c
             flux_list_add(list, ipush_command);
             number_of_commands++;
         }
-        else if (bytes[i] == IADD) {
-            flux_list_add(list, flux_command_init(IADD, NULL, 0));
-            number_of_commands++;
-        }
-        else if (bytes[i] == ISUB) {
-            flux_list_add(list, flux_command_init(ISUB, NULL, 0));
-            number_of_commands++;
-        }
-        else if (bytes[i] == LOAD) {
-            flux_list_add(list, flux_command_init(LOAD, NULL, 0));
-            number_of_commands++;
-        }
-        else if (bytes[i] == STORE) {
-            flux_list_add(list, flux_command_init(STORE, NULL, 0));
+        else if (bytes[i] == IADD || bytes[i] == ISUB || bytes[i] == LOAD || bytes[i] == STORE || bytes[i] == CMP) {
+            flux_list_add(list, flux_command_init(bytes[i], NULL, 0));
             number_of_commands++;
         }
         else if (bytes[i] == PRINT || bytes[i] == INSPECT) {
@@ -111,10 +99,6 @@ int flux_code_convert_to_flux_commands(char* bytes, int length, FluxCommand*** c
             param[0] = obj;
             FluxCommand* jmp = flux_command_init(instruction, param, 1);
             flux_list_add(list, jmp);
-            number_of_commands++;
-        }
-        else if (bytes[i] == CMP) {
-            flux_list_add(list, flux_command_init(CMP, NULL, 0));
             number_of_commands++;
         }
         else {
