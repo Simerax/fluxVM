@@ -19,6 +19,7 @@ typedef enum {
     INSPECT,
     ISUB,
     IMUL,
+    IDIV,
 
 } FluxInstruction;
 

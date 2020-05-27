@@ -30,6 +30,7 @@ void flux_vm_push(FluxVM*, FluxObject*);
 void flux_vm_iadd(FluxVM*);
 void flux_vm_isub(FluxVM*);
 void flux_vm_imul(FluxVM*);
+void flux_vm_idiv(FluxVM*);
 void flux_vm_pop(FluxVM*);
 
 void flux_vm_itod(FluxVM*);

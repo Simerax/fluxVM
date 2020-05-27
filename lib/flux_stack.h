@@ -28,6 +28,7 @@ void flux_stack_cpush(FluxStack*, char value);
 void flux_stack_iadd(FluxStack*);
 void flux_stack_isub(FluxStack*);
 void flux_stack_imul(FluxStack*);
+void flux_stack_idiv(FluxStack*);
 
 void flux_stack_set_error(FluxStack*, FluxStackError);
 FluxStackError flux_stack_get_error(FluxStack*);
