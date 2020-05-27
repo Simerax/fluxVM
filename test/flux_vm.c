@@ -69,8 +69,7 @@ START_TEST (test_running_bytecode)
     FluxVM* vm = flux_vm_init();
 
     char bytecode[11] = {
-        //IPUSH
-        3,
+        IPUSH,
 
         // Integer 20 in big endian notation 4 byte
         0,
@@ -79,8 +78,7 @@ START_TEST (test_running_bytecode)
         20,
 
 
-        //IPUSH
-        3,
+        IPUSH,
 
         // Integer 22 in big endian notation 4 byte
         0,
@@ -88,8 +86,7 @@ START_TEST (test_running_bytecode)
         0,
         22,
 
-        //IADD
-        1,
+        IADD,
     };
     // after this bytecode the result of 20 + 22 should be on top of the stack
 
