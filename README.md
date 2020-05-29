@@ -17,4 +17,6 @@ Right now there is really only one way to build this project and this will build
     
     
 ## Running Code
-Well right now running code is very limited. You can do simple Integer addition and store results in variables. Check out the examples directory
+Well right now running code is very limited. You can add and subtract Integers do jumps and print strings.
+
+If you want to run example code you should __build the project in release mode__. In debug mode you will get a boatload of noisey debug messages. You can just change the `CMAKE_BUILD_TYPE` from `Debug` to `Release` inside the `build.sh` script
