@@ -66,6 +66,20 @@ START_TEST (test_compare_char_flux_object)
 }
 END_TEST
 
+START_TEST (test_str_flux_object)
+{
+    char string[] = "Hello";
+    FluxObject* obj = flux_object_strinit(string, sizeof(string));
+
+    ck_assert_int_eq(flux_object_get_type(obj), String);
+    char* value = flux_object_get_str_value(obj);
+    ck_assert_int_eq(strcmp(value, "Hello"), 0);
+    ck_assert_int_eq(flux_object_get_size(obj), 6); // 6 because it's NULL terminated
+
+    flux_object_free(obj);
+}
+END_TEST
+
 
 TEST_HELPER_START(flux_object);
 
@@ -73,5 +87,6 @@ TEST_HELPER_ADD_TEST(test_integer_flux_object);
 TEST_HELPER_ADD_TEST(test_integer_to_double_flux_object);
 TEST_HELPER_ADD_TEST(test_char_flux_object);
 TEST_HELPER_ADD_TEST(test_compare_char_flux_object);
+TEST_HELPER_ADD_TEST(test_str_flux_object);
 
 TEST_HELPER_END_TEST

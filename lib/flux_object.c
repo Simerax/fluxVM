@@ -14,6 +14,16 @@ FluxObject* flux_object_init() {
     return obj;
 }
 
+FluxObject* flux_object_strinit(char* string, unsigned int length) {
+    FluxObject* obj = flux_object_init();
+    obj->type = String;
+    obj->value_size = length;
+    obj->value = malloc(obj->value_size);
+    // TODO: for now we copy the string maybe we should add a way to just move the string instead of copying
+    memcpy(obj->value, string, length);
+    return obj;
+}
+
 FluxObject* flux_object_iinit(int value) {
     FluxObject* obj = flux_object_init();
     obj->type = Integer;
@@ -30,6 +40,10 @@ FluxObject* flux_object_cinit(char value) {
     obj->value = malloc(obj->value_size);
     *((char*)obj->value) = value;
     return obj;
+}
+
+size_t flux_object_get_size(FluxObject* obj) {
+    return obj->value_size;
 }
 
 void flux_object_inc_ref(FluxObject* obj) {
@@ -78,6 +92,8 @@ void flux_object_print(FluxObject* obj) {
                       break;
         case Char:    printf("%c\n", *((char*)obj->value));
                       break;
+        case String:  printf("%s\n", (char*)obj->value);
+                      break;
         default: printf("Tried printing of unsupported obj type! %p\n", obj);
     }
 }
@@ -125,6 +141,10 @@ double flux_object_get_double_value(FluxObject* obj) {
 
 char flux_object_get_char_value(FluxObject* obj) {
     return *((char*)obj->value);
+}
+
+char* flux_object_get_str_value(FluxObject* obj) {
+    return ((char*)obj->value);
 }
 
 FluxObjectType flux_object_get_type(FluxObject* obj) {

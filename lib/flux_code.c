@@ -68,6 +68,21 @@ int flux_code_convert_to_flux_commands(char* bytes, int length, FluxCommand*** c
             flux_list_add(list, ipush_command);
             number_of_commands++;
         }
+        else if (bytes[i] == SPUSH) {
+            int str_length;
+            memcpy(&str_length, (bytes + i + 1), 4);
+            str_length = INT32_TO_SYSTEM_ENDIANNESS(str_length);
+            i += 5;
+
+            FluxObject* obj = flux_object_strinit((bytes + i), str_length);
+            i += str_length - 1;
+
+            FluxObject** param = malloc(sizeof(FluxObject*));
+            param[0] = obj;
+            FluxCommand* spush_command = flux_command_init(SPUSH, param, 1);
+            flux_list_add(list, spush_command);
+            number_of_commands++;
+        }
         else if (bytes[i] == IADD || bytes[i] == ISUB || bytes[i] == LOAD || bytes[i] == STORE || bytes[i] == CMP || bytes[i] == IMUL || bytes[i] == IDIV) {
             flux_list_add(list, flux_command_init(bytes[i], NULL, 0));
             number_of_commands++;

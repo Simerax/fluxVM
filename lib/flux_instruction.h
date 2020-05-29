@@ -20,6 +20,7 @@ typedef enum {
     ISUB,
     IMUL,
     IDIV,
+    SPUSH,
 
 } FluxInstruction;
 

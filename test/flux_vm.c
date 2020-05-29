@@ -1,4 +1,5 @@
 #include"check.h"
+#include "flux_instruction.h"
 #include "flux_object.h"
 #include "flux_stack.h"
 #include"test_helper.h"
@@ -961,6 +962,54 @@ START_TEST (test_bytecode_IDIV)
 }
 END_TEST
 
+START_TEST (test_bytecode_PRINT_STRING)
+{
+    FluxVM* vm = flux_vm_init();
+
+    char bytecode[] = {
+        SPUSH,
+
+        0,
+        0,
+        0,
+        6,
+        'H',
+        'e',
+        'l',
+        'l',
+        'o',
+        '\0',
+
+        INSPECT,
+    };
+
+    FluxCode* code = flux_code_init(bytecode, sizeof(bytecode));
+
+    ck_assert_int_eq(code->number_of_commands, 2);
+
+    FluxCommand** commands = code->commands;
+    
+    ck_assert_ptr_nonnull(commands);
+    ck_assert_ptr_nonnull(commands[0]);
+    ck_assert_ptr_nonnull(commands[1]);
+
+    ck_assert_int_eq(commands[0]->instruction, SPUSH);
+    ck_assert_int_eq(commands[1]->instruction, INSPECT);
+
+
+    flux_vm_execute(vm, code);
+    FluxObject* result = flux_stack_get_noffset(vm->stack, 1);
+
+    ck_assert_ptr_nonnull(result);
+    ck_assert_int_eq(flux_object_get_type(result), String);
+
+    ck_assert_int_eq(strcmp(flux_object_get_str_value(result), "Hello"), 0);
+
+    flux_code_free(code);
+    flux_vm_free(vm);
+}
+END_TEST
+
 TEST_HELPER_START(flux_vm);
 
 TEST_HELPER_ADD_TEST(test_stack_integer_addition);
@@ -983,5 +1032,6 @@ TEST_HELPER_ADD_TEST(test_bytecode_JGE);
 TEST_HELPER_ADD_TEST(test_bytecode_SUBTRACT);
 TEST_HELPER_ADD_TEST(test_bytecode_MULTIPLY);
 TEST_HELPER_ADD_TEST(test_bytecode_IDIV);
+TEST_HELPER_ADD_TEST(test_bytecode_PRINT_STRING);
 
 TEST_HELPER_END_TEST

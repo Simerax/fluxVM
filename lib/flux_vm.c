@@ -186,6 +186,8 @@ void flux_vm_execute(FluxVM* vm, FluxCode* code) {
         switch(cmd->instruction) {
             case IPUSH: flux_vm_push(vm, cmd->parameters[0]);
                         break;
+            case SPUSH: flux_vm_push(vm, cmd->parameters[0]);
+                        break;
             case IADD: flux_vm_iadd(vm);
                        break;
             case ISUB: flux_vm_isub(vm);

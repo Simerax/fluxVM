@@ -10,6 +10,7 @@ typedef enum {
     Integer,
     Double,
     Char,
+    String,
 
 } FluxObjectType;
 
@@ -29,6 +30,7 @@ void flux_object_dec_ref(FluxObject*);
 
 FluxObject* flux_object_iinit(int);
 FluxObject* flux_object_cinit(char);
+FluxObject* flux_object_strinit(char*, unsigned int);
 
 void flux_object_print(FluxObject*);
 void flux_object_inspect(FluxObject*);
@@ -38,7 +40,10 @@ FluxObject* flux_object_copy(FluxObject*);
 
 int flux_object_get_int_value(FluxObject*);
 char flux_object_get_char_value(FluxObject*);
+char* flux_object_get_str_value(FluxObject*);
 double flux_object_get_double_value(FluxObject*);
+
+size_t flux_object_get_size(FluxObject*);
 
 
 FluxObjectType flux_object_get_type(FluxObject*);
