@@ -12,6 +12,7 @@ use constant {
     INSPECT => pack("C",15),
     CMP => pack("C",9), 
     JL => pack("C",12), 
+    SPUSH => pack("C", 19),
 };
 
 
@@ -36,8 +37,17 @@ sub main {
         Int(0).
         LOAD.
 
-        # Print the variable (without modifiying the stack)
+        # Print the variable togehter with some informational string (without modifiying the stack)
+        # note the variable itself is print via INSPECT which leaves the variable on the stack
+        # The informational string "Counter is: " and the newline are printed with PRINT which removes them
+        # from the stack after printing
+        SPUSH.
+        Str("Counter is: ").
+        PRINT.
         INSPECT.
+        SPUSH.
+        Str("\n").
+        PRINT.
 
         # Add 1 to the variable
         IPUSH.
@@ -68,6 +78,15 @@ sub main {
 }
 
 
+sub Str {
+    my ($str) = @_;
+    unless ($str =~ /\0$/) {
+        $str .= "\0";
+    }
+    my $len;
+    { use bytes; $len = length($str); }
+    return Int($len) . $str;
+}
 
 sub Int {
     return pack("N!", $_[0]);
