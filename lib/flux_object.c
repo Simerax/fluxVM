@@ -86,13 +86,13 @@ void flux_object_print(FluxObject* obj) {
     }
 
     switch(obj->type) {
-        case Integer: printf("%d\n", *((int*)obj->value));
+        case Integer: printf("%d", *((int*)obj->value));
                       break;
-        case Double:  printf("%f\n", *((double*)obj->value));
+        case Double:  printf("%f", *((double*)obj->value));
                       break;
-        case Char:    printf("%c\n", *((char*)obj->value));
+        case Char:    printf("%c", *((char*)obj->value));
                       break;
-        case String:  printf("%s\n", (char*)obj->value);
+        case String:  printf("%s", (char*)obj->value);
                       break;
         default: printf("Tried printing of unsupported obj type! %p\n", obj);
     }
