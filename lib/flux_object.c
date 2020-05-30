@@ -5,6 +5,7 @@
 #include "flux_vm.h"
 #include<stdlib.h>
 #include<string.h> // memcpy
+#include<stdio.h> // printf
 
 FluxObject* flux_object_init() {
     FluxObject* obj = malloc(sizeof(FluxObject));
