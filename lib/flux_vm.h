@@ -16,6 +16,8 @@ typedef struct {
     int instruction_index;
     FluxCmpResult cmp_flag;
     bool did_jump;
+    FluxCode* code;
+    bool uncaught_exception_flag;
 } FluxVM;
 
 
@@ -37,6 +39,7 @@ FluxArithmeticError flux_vm_idiv(FluxVM*);
 void flux_vm_pop(FluxVM*);
 
 void flux_vm_throw_internal(FluxVM*, FluxExceptionType, FluxExceptionTable*);
+void flux_vm_throw(FluxVM*);
 
 void flux_vm_itod(FluxVM*);
 

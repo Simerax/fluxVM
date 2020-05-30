@@ -1081,6 +1081,75 @@ START_TEST (test_bytecode_EXCEPTION_IDIV_BY_ZERO)
 }
 END_TEST
 
+START_TEST (test_bytecode_EXCEPTION_THROW_INTEGER)
+{
+    FluxVM* vm = flux_vm_init();
+
+    char bytecode[] = {
+
+        // create the exception table
+        AEX,
+        0,0,0,0,
+        0,0,0,2,
+        0,0,0,4,
+        0,0,0,1,
+
+        IPUSH,
+        0,0,0,6, // this variable should be just be thrown away when the stack gets cleaned up
+
+        IPUSH,
+        0,0,0,7, // <- value to be thrown
+
+        THROW,
+
+        IPUSH, // this code should never be run
+        0,0,0,20,
+
+
+        // Code to handle the exception
+        IPUSH,
+        0,0,0,10,
+
+        IADD // Add 10 to the thrown value (7)
+    };
+
+    FluxCode* code = flux_code_init(bytecode, sizeof(bytecode));
+
+    ck_assert_ptr_nonnull(code);
+
+    ck_assert_int_eq(code->number_of_commands, 6);
+
+    FluxCommand** commands = code->commands;
+    ck_assert_ptr_nonnull(commands);
+    ck_assert_ptr_nonnull(commands[0]);
+    ck_assert_ptr_nonnull(commands[1]);
+    ck_assert_ptr_nonnull(commands[2]);
+    ck_assert_ptr_nonnull(commands[3]);
+    ck_assert_ptr_nonnull(commands[4]);
+    ck_assert_ptr_nonnull(commands[5]);
+
+    ck_assert_int_eq(commands[0]->instruction, IPUSH);
+    ck_assert_int_eq(commands[1]->instruction, IPUSH);
+    ck_assert_int_eq(commands[2]->instruction, THROW);
+    ck_assert_int_eq(commands[3]->instruction, IPUSH);
+    ck_assert_int_eq(commands[4]->instruction, IPUSH);
+    ck_assert_int_eq(commands[5]->instruction, IADD);
+
+
+    flux_vm_execute(vm, code);
+    FluxObject* result = flux_stack_get_noffset(vm->stack, 1);
+    FluxObject* should_be_null = flux_stack_get_noffset(vm->stack, 2); 
+
+    ck_assert_ptr_nonnull(result);
+    ck_assert_ptr_null(should_be_null); // since throw empties the stack and only puts the result back onto the stack there should be nothing else left
+
+    ck_assert_int_eq(flux_object_get_int_value(result), 17);
+
+    flux_code_free(code);
+    flux_vm_free(vm);
+}
+END_TEST
+
 TEST_HELPER_START(flux_vm);
 
 TEST_HELPER_ADD_TEST(test_stack_integer_addition);
@@ -1105,5 +1174,6 @@ TEST_HELPER_ADD_TEST(test_bytecode_MULTIPLY);
 TEST_HELPER_ADD_TEST(test_bytecode_IDIV);
 TEST_HELPER_ADD_TEST(test_bytecode_PRINT_STRING);
 TEST_HELPER_ADD_TEST(test_bytecode_EXCEPTION_IDIV_BY_ZERO);
+TEST_HELPER_ADD_TEST(test_bytecode_EXCEPTION_THROW_INTEGER);
 
 TEST_HELPER_END_TEST

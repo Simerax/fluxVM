@@ -32,6 +32,8 @@ void flux_stack_isub(FluxStack*);
 void flux_stack_imul(FluxStack*);
 FluxArithmeticError flux_stack_idiv(FluxStack*);
 
+void flux_stack_clear(FluxStack*);
+
 void flux_stack_set_error(FluxStack*, FluxStackError);
 FluxStackError flux_stack_get_error(FluxStack*);
 void flux_stack_reset_error(FluxStack*);

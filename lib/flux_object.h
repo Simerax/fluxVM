@@ -8,11 +8,11 @@
 
 
 typedef enum {
-    Integer,
-    Double,
-    Char,
-    String,
-    Exception,
+    Integer = 1,
+    Double = 2,
+    Char = 3,
+    String = 4,
+    Exception = 5,
 
 } FluxObjectType;
 
@@ -49,6 +49,7 @@ size_t flux_object_get_size(FluxObject*);
 
 
 FluxObjectType flux_object_get_type(FluxObject*);
+FluxExceptionType flux_object_get_exception_type(FluxObject*);
 
 FluxCmpResult flux_object_cmp(FluxObject*, FluxObject*);
 

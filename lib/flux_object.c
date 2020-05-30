@@ -185,3 +185,13 @@ FluxCmpResult flux_object_cmp(FluxObject* a, FluxObject* b) {
     }
     return EQUAL; // FIXME: Well this is just wrong but rn its not a problem
 }
+
+FluxExceptionType flux_object_get_exception_type(FluxObject* obj) {
+    switch(flux_object_get_type(obj)) {
+        case Integer: return flux_exception_type_integer;
+        case Double: return flux_exception_type_double;
+        case Char: return flux_exception_type_char;
+        case String: return flux_exception_type_string;
+        default: return flux_exception_type_unknown;
+    }
+}

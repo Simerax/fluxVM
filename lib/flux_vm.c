@@ -17,6 +17,9 @@ FluxVM* flux_vm_init() {
     vm->stack = flux_stack_init();
     vm->vars = malloc(sizeof(FluxObject*[FLUX_MAX_VARS]));
     vm->instruction_index = 0;
+    vm->did_jump = false;
+    vm->code = NULL;
+    vm->cmp_flag = NONE;
     for(int i = 0; i < FLUX_MAX_VARS; i++)
         vm->vars[i] = NULL;
 
@@ -178,6 +181,7 @@ bool flux_vm_jge(FluxVM* vm, FluxObject* address) {
 
 void flux_vm_execute(FluxVM* vm, FluxCode* code) {
 
+    vm->code = code;
     vm->instruction_index = 0;
     vm->did_jump = false;
 
@@ -235,8 +239,8 @@ void flux_vm_execute(FluxVM* vm, FluxCode* code) {
             case JGE: if(flux_vm_jge(vm, cmd->parameters[0]))
                           vm->did_jump = true;
                       break;
-                     
-                     break;
+            case THROW: flux_vm_throw(vm);
+                        break;
             default: FLUX_ELOG("Unknown Instruction %d", cmd->instruction);
                      break;
         }
@@ -253,6 +257,25 @@ void flux_vm_throw_internal(FluxVM *vm, FluxExceptionType type, FluxExceptionTab
     if(ex != NULL) {
         vm->instruction_index = ex->jump_instruction;
         vm->did_jump = true;
+    }
+}
+
+void flux_vm_throw(FluxVM* vm) {
+    FluxObject* object_to_throw = flux_stack_get_noffset(vm->stack, 1);
+
+
+    FluxExceptionType type = flux_object_get_exception_type(object_to_throw);
+    FluxException* ex = flux_exception_table_lookup(vm->code->exception_table, type, vm->instruction_index);
+    if(ex == NULL) {
+        vm->uncaught_exception_flag = true;
+        FLUX_ELOG("Uncaught Exception at Instruction %d", vm->instruction_index);
+    } else {
+        vm->instruction_index = ex->jump_instruction;
+        vm->did_jump = true;
+        flux_object_inc_ref(object_to_throw); // make sure the variable does not get freed when the stack is cleared
+        flux_stack_clear(vm->stack);
+        flux_stack_push(vm->stack, object_to_throw);
+        flux_object_dec_ref(object_to_throw);
     }
 }
 

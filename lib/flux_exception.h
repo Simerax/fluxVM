@@ -1,6 +1,7 @@
 #ifndef FLUX_EXCEPTION_H
 #define FLUX_EXCEPTION_H
 
+
 /*
  * List of builtin exception types
  * values 0 up to 1000 are reserved for builtin use
@@ -8,6 +9,12 @@
  * */
 typedef enum {
     flux_exception_type_division_by_zero = 0,
+    flux_exception_type_integer = 1,
+    flux_exception_type_double,
+    flux_exception_type_char,
+    flux_exception_type_string,
+    flux_exception_type_unknown,
+
 } FluxExceptionType;
 
 typedef struct {

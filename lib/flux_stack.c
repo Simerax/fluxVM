@@ -166,3 +166,9 @@ void flux_stack_reset_error(FluxStack* stack) {
     stack->error = flux_stack_error_no_error;
 }
 
+void flux_stack_clear(FluxStack* stack) {
+    while(stack->index > 0) {
+        flux_stack_pop(stack);
+    }
+}
+
