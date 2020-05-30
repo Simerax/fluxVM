@@ -1020,7 +1020,7 @@ START_TEST (test_bytecode_EXCEPTION_IDIV_BY_ZERO)
         AEX, // add exception
         0,0,0,0, // valid from instruction 0 (IPUSH)
         0,0,0,2, // up to instruction 2 (IDIV)
-        0,0,0,4, // in case there is a throw we jump to Instruction 3 (POP)
+        0,0,0,4, // in case there is a throw we jump to Instruction 4 (the last IPUSH)
         // the type for which this exception is valid - DivisionByZero
         0,0,0,15,
         'D','i','v','i','s','i','o','n','B','y','Z','e','r','o','\0',
@@ -1047,7 +1047,6 @@ START_TEST (test_bytecode_EXCEPTION_IDIV_BY_ZERO)
 
 
         // Code to handle the exception
-        // POP the exception object and push 10 onto the stack
         IPUSH,
         0,0,0,10
     };
