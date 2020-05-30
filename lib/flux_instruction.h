@@ -22,7 +22,6 @@ typedef enum {
     IDIV,
     SPUSH,
     AEX,
-    TINT,
 
 } FluxInstruction;
 
