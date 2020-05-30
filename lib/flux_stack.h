@@ -45,6 +45,9 @@ FluxObject* flux_stack_get_noffset(FluxStack*, int offset);
 void flux_stack_print(FluxStack*);
 void flux_stack_inspect(FluxStack*);
 
+void flux_stack_clean_frame(FluxStack*);
+void flux_stack_add_frame(FluxStack*);
+
 
 
 

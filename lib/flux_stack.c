@@ -172,3 +172,22 @@ void flux_stack_clear(FluxStack* stack) {
     }
 }
 
+void flux_stack_clean_frame(FluxStack* stack) {
+
+    while(1) {
+        FluxObject* obj = flux_stack_get_noffset(stack, 1);
+        if(obj != NULL) {
+            if(flux_object_get_type(obj) == Frame) {
+                return;
+            } else {
+                flux_stack_pop(stack);
+            }
+        } else {
+            FLUX_ELOG("NULL Pointer on Stack! Index %d", stack->index);
+            return;
+        }
+    }
+    //while(flux_object_get_type(flux_stack_get_noffset(stack,1)) != Frame) {
+    //    flux_stack_pop(stack);
+    //}
+}

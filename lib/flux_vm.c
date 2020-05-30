@@ -21,6 +21,7 @@ FluxVM* flux_vm_init() {
     vm->code = NULL;
     vm->cmp_flag = NONE;
     vm->uncaught_exception_flag = false;
+    vm->exit_flag = false;
     for(int i = 0; i < FLUX_MAX_VARS; i++)
         vm->vars[i] = NULL;
 
@@ -129,6 +130,7 @@ void flux_vm_itod(FluxVM* vm) {
 
 void flux_vm_jmp(FluxVM* vm, FluxObject* address) {
     vm->instruction_index = flux_object_get_int_value(address);
+    vm->did_jump = true;
     FLUX_DLOG("JMP to index %d", vm->instruction_index);
 }
 
@@ -222,9 +224,7 @@ FluxVMError flux_vm_execute(FluxVM* vm, FluxCode* code) {
                         break;
             case INSPECT: flux_vm_inspect(vm);
                           break;
-            case JSR: flux_vm_ipush(vm, vm->instruction_index);
-                      flux_vm_jmp(vm, cmd->parameters[0]);
-                      vm->did_jump = true;
+            case JSR: flux_vm_jsr(vm, cmd->parameters[0]);
                       break;
             case CMP: flux_vm_cmp(vm);
                       break;
@@ -242,8 +242,16 @@ FluxVMError flux_vm_execute(FluxVM* vm, FluxCode* code) {
                       break;
             case THROW: flux_vm_throw(vm);
                         break;
+            case RET: flux_vm_ret(vm);
+                      break;
+            case EXIT: vm->exit_flag = true;
+                       break;
             default: FLUX_ELOG("Unknown Instruction %d", cmd->instruction);
                      break;
+        }
+
+        if(vm->exit_flag == true) {
+            break;
         }
 
         if(vm->uncaught_exception_flag == true) {
@@ -304,5 +312,22 @@ void flux_vm_cmp(FluxVM* vm) {
 
     flux_stack_pop(vm->stack);
     flux_stack_pop(vm->stack);
+}
+
+void flux_vm_jsr(FluxVM* vm, FluxObject* address) {
+    FluxObject* frame = flux_object_frame_init(vm->instruction_index + 1);
+    flux_vm_push(vm, frame);
+    flux_vm_jmp(vm, address);
+}
+
+void flux_vm_ret(FluxVM* vm) {
+    FluxObject* return_value = flux_stack_get_noffset(vm->stack, 1);
+    flux_object_inc_ref(return_value);
+    flux_stack_clean_frame(vm->stack);
+    FluxObject* frame = flux_stack_get_noffset(vm->stack, 1);
+    flux_vm_jmp(vm, frame);
+    flux_stack_pop(vm->stack); // get rid of the Frame Object
+    flux_stack_push(vm->stack, return_value);
+    flux_object_dec_ref(return_value);
 }
 

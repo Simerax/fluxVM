@@ -35,6 +35,12 @@ FluxObject* flux_object_iinit(int value) {
     return obj;
 }
 
+FluxObject* flux_object_frame_init(int address) {
+    FluxObject* obj = flux_object_iinit(address);
+    obj->type = Frame;
+    return obj;
+}
+
 FluxObject* flux_object_cinit(char value) {
     FluxObject* obj = flux_object_init();
     obj->type = Char;

@@ -13,6 +13,7 @@ typedef enum {
     Char = 3,
     String = 4,
     Exception = 5,
+    Frame = 6,
 
 } FluxObjectType;
 
@@ -33,6 +34,7 @@ void flux_object_dec_ref(FluxObject*);
 FluxObject* flux_object_iinit(int);
 FluxObject* flux_object_cinit(char);
 FluxObject* flux_object_strinit(char*, unsigned int);
+FluxObject* flux_object_frame_init(int);
 
 void flux_object_print(FluxObject*);
 void flux_object_inspect(FluxObject*);

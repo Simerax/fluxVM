@@ -125,6 +125,13 @@ typedef enum {
     // Throw does not take any parameters
     THROW, 
 
+    // return from function call
+    RET,
+
+    // Exit the program
+    // Does not take any arguments at the moment
+    EXIT,
+
 } FluxInstruction;
 
 #endif //FLUX_INSTRUCTION_H

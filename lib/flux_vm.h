@@ -33,6 +33,7 @@ typedef struct {
     bool did_jump;
     FluxCode* code;
     bool uncaught_exception_flag;
+    bool exit_flag;
 } FluxVM;
 
 
@@ -65,8 +66,11 @@ bool flux_vm_je(FluxVM*, FluxObject*);
 bool flux_vm_jl(FluxVM*, FluxObject*);
 bool flux_vm_jle(FluxVM*, FluxObject*);
 bool flux_vm_jge(FluxVM*, FluxObject*);
+void flux_vm_jsr(FluxVM*, FluxObject*);
 
 void flux_vm_cmp(FluxVM*);
+
+void flux_vm_ret(FluxVM*);
 
 
 
