@@ -1150,6 +1150,52 @@ START_TEST (test_bytecode_EXCEPTION_THROW_INTEGER)
 }
 END_TEST
 
+START_TEST (test_bytecode_EXCEPTION_THROW_INTEGER_NO_EXCEPTION_TABLE)
+{
+    FluxVM* vm = flux_vm_init();
+
+    char bytecode[] = {
+        IPUSH,
+        0,0,0,6, // this variable should be just be thrown away when the stack gets cleaned up
+
+        IPUSH,
+        0,0,0,7, // <- value to be thrown
+
+        THROW,
+
+        IPUSH, // this code should never be run
+        0,0,0,20,
+    };
+
+    FluxCode* code = flux_code_init(bytecode, sizeof(bytecode));
+
+    ck_assert_ptr_nonnull(code);
+
+    ck_assert_int_eq(code->number_of_commands, 4);
+
+    FluxCommand** commands = code->commands;
+    ck_assert_ptr_nonnull(commands);
+    ck_assert_ptr_nonnull(commands[0]);
+    ck_assert_ptr_nonnull(commands[1]);
+    ck_assert_ptr_nonnull(commands[2]);
+    ck_assert_ptr_nonnull(commands[3]);
+
+    ck_assert_int_eq(commands[0]->instruction, IPUSH);
+    ck_assert_int_eq(commands[1]->instruction, IPUSH);
+    ck_assert_int_eq(commands[2]->instruction, THROW);
+    ck_assert_int_eq(commands[3]->instruction, IPUSH);
+
+
+    FluxVMError error = flux_vm_execute(vm, code);
+
+    ck_assert_int_eq(error.type, flux_vm_error_type_uncaught_exception);
+    ck_assert_int_eq(error.position, 2);
+
+    flux_code_free(code);
+    flux_vm_free(vm);
+}
+END_TEST
+
 TEST_HELPER_START(flux_vm);
 
 TEST_HELPER_ADD_TEST(test_stack_integer_addition);
@@ -1175,5 +1221,6 @@ TEST_HELPER_ADD_TEST(test_bytecode_IDIV);
 TEST_HELPER_ADD_TEST(test_bytecode_PRINT_STRING);
 TEST_HELPER_ADD_TEST(test_bytecode_EXCEPTION_IDIV_BY_ZERO);
 TEST_HELPER_ADD_TEST(test_bytecode_EXCEPTION_THROW_INTEGER);
+TEST_HELPER_ADD_TEST(test_bytecode_EXCEPTION_THROW_INTEGER_NO_EXCEPTION_TABLE);
 
 TEST_HELPER_END_TEST

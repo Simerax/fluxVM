@@ -10,6 +10,21 @@
 
 #define FLUX_MAX_VARS 256
 
+typedef enum {
+    flux_vm_error_type_no_error = 0,
+    flux_vm_error_type_uncaught_exception = 1,
+} FluxVMErrorType;
+
+typedef struct {
+    FluxVMErrorType type;
+    unsigned int position; // instruction index
+} FluxVMError;
+
+FluxVMError flux_vm_error_init();
+FluxVMError flux_vm_error_init_no_error();
+FluxVMError flux_vm_error_init_uncaught_exception();
+
+
 typedef struct {
     FluxStack* stack;
     FluxObject** vars;
@@ -43,7 +58,7 @@ void flux_vm_throw(FluxVM*);
 
 void flux_vm_itod(FluxVM*);
 
-void flux_vm_execute(FluxVM*, FluxCode*);
+FluxVMError flux_vm_execute(FluxVM*, FluxCode*);
 
 void flux_vm_jmp(FluxVM*, FluxObject*);
 bool flux_vm_je(FluxVM*, FluxObject*);
@@ -52,6 +67,7 @@ bool flux_vm_jle(FluxVM*, FluxObject*);
 bool flux_vm_jge(FluxVM*, FluxObject*);
 
 void flux_vm_cmp(FluxVM*);
+
 
 
 #endif //FLUX_VM_H

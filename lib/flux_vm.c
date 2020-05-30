@@ -20,6 +20,7 @@ FluxVM* flux_vm_init() {
     vm->did_jump = false;
     vm->code = NULL;
     vm->cmp_flag = NONE;
+    vm->uncaught_exception_flag = false;
     for(int i = 0; i < FLUX_MAX_VARS; i++)
         vm->vars[i] = NULL;
 
@@ -179,7 +180,7 @@ bool flux_vm_jge(FluxVM* vm, FluxObject* address) {
     }
 }
 
-void flux_vm_execute(FluxVM* vm, FluxCode* code) {
+FluxVMError flux_vm_execute(FluxVM* vm, FluxCode* code) {
 
     vm->code = code;
     vm->instruction_index = 0;
@@ -245,11 +246,23 @@ void flux_vm_execute(FluxVM* vm, FluxCode* code) {
                      break;
         }
 
-        if(vm->did_jump)
+        if(vm->uncaught_exception_flag == true) {
+            FluxVMError err;
+            err.type = flux_vm_error_type_uncaught_exception;
+            err.position = vm->instruction_index;
+            return err;
+        }
+
+        if(vm->did_jump == true)
             vm->did_jump = false;
         else
             vm->instruction_index++;
     }
+
+    FluxVMError no_error;
+    no_error.type = flux_vm_error_type_no_error;
+    no_error.position = 0;
+    return no_error;
 }
 
 void flux_vm_throw_internal(FluxVM *vm, FluxExceptionType type, FluxExceptionTable *table) {
@@ -257,6 +270,9 @@ void flux_vm_throw_internal(FluxVM *vm, FluxExceptionType type, FluxExceptionTab
     if(ex != NULL) {
         vm->instruction_index = ex->jump_instruction;
         vm->did_jump = true;
+    } else {
+        vm->uncaught_exception_flag = true;
+        FLUX_ELOG("Uncaught Exception at Instruction %d", vm->instruction_index);
     }
 }
 
