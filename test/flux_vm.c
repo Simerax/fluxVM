@@ -1010,6 +1010,81 @@ START_TEST (test_bytecode_PRINT_STRING)
 }
 END_TEST
 
+START_TEST (test_bytecode_EXCEPTION_IDIV_BY_ZERO)
+{
+    FluxVM* vm = flux_vm_init();
+
+    char bytecode[] = {
+
+        // create the exception table
+        AEX, // add exception
+        0,0,0,0, // valid from instruction 0 (IPUSH)
+        0,0,0,2, // up to instruction 2 (IDIV)
+        0,0,0,4, // in case there is a throw we jump to Instruction 3 (POP)
+        // the type for which this exception is valid - DivisionByZero
+        0,0,0,15,
+        'D','i','v','i','s','i','o','n','B','y','Z','e','r','o','\0',
+
+
+        // Start actual code
+        IPUSH,
+
+        0,
+        0,
+        0,
+        6,
+
+        IPUSH,
+        0,
+        0,
+        0,
+        0,
+
+        IDIV, // IDIV will internally throw
+
+        IPUSH, // this code should never be run
+        0,0,0,20,
+
+
+        // Code to handle the exception
+        // POP the exception object and push 10 onto the stack
+        IPUSH,
+        0,0,0,10
+    };
+
+    FluxCode* code = flux_code_init(bytecode, sizeof(bytecode));
+
+    ck_assert_ptr_nonnull(code);
+
+    ck_assert_int_eq(code->number_of_commands, 5);
+
+    FluxCommand** commands = code->commands;
+    ck_assert_ptr_nonnull(commands);
+    ck_assert_ptr_nonnull(commands[0]);
+    ck_assert_ptr_nonnull(commands[1]);
+    ck_assert_ptr_nonnull(commands[2]);
+    ck_assert_ptr_nonnull(commands[3]);
+    ck_assert_ptr_nonnull(commands[4]);
+
+    ck_assert_int_eq(commands[0]->instruction, IPUSH);
+    ck_assert_int_eq(commands[1]->instruction, IPUSH);
+    ck_assert_int_eq(commands[2]->instruction, IDIV);
+    ck_assert_int_eq(commands[3]->instruction, IPUSH);
+    ck_assert_int_eq(commands[4]->instruction, IPUSH);
+
+
+    flux_vm_execute(vm, code);
+    FluxObject* result = flux_stack_get_noffset(vm->stack, 1);
+    FluxObject* should_be_null = flux_stack_get_noffset(vm->stack, 2); // We know the exception was thrown when the first IPUSH after IDIV was not executed
+
+    ck_assert_ptr_nonnull(result);
+    ck_assert_ptr_null(should_be_null);
+
+    flux_code_free(code);
+    flux_vm_free(vm);
+}
+END_TEST
+
 TEST_HELPER_START(flux_vm);
 
 TEST_HELPER_ADD_TEST(test_stack_integer_addition);
@@ -1033,5 +1108,6 @@ TEST_HELPER_ADD_TEST(test_bytecode_SUBTRACT);
 TEST_HELPER_ADD_TEST(test_bytecode_MULTIPLY);
 TEST_HELPER_ADD_TEST(test_bytecode_IDIV);
 TEST_HELPER_ADD_TEST(test_bytecode_PRINT_STRING);
+TEST_HELPER_ADD_TEST(test_bytecode_EXCEPTION_IDIV_BY_ZERO);
 
 TEST_HELPER_END_TEST

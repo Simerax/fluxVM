@@ -2,6 +2,7 @@
 #define FLUX_OBJECT_H
 
 #include "flux_cmp_result.h"
+#include "flux_exception.h"
 #include<stddef.h> // size_t
 #include<stdbool.h> // bool
 
@@ -11,6 +12,7 @@ typedef enum {
     Double,
     Char,
     String,
+    Exception,
 
 } FluxObjectType;
 

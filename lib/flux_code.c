@@ -3,6 +3,8 @@
 #include<stdlib.h> // malloc
 #include<endian.h>
 #include "flux_command.h"
+#include "flux_exception.h"
+#include "flux_exception_table.h"
 #include "flux_instruction.h"
 #include"flux_list.h"
 #include"flux_log.h"
@@ -21,12 +23,14 @@
 FluxCode* flux_code_init(char* bytes, int length) {
 
     FluxCode* code = malloc(sizeof(FluxCode));
+    FluxExceptionTable* exception_table = flux_exception_table_init();
 
     FluxCommand** commands;
-    int number_of_commands = flux_code_convert_to_flux_commands(bytes, length, &commands);
+    int number_of_commands = flux_code_convert_to_flux_commands(bytes, length, &commands, &exception_table);
 
     code->commands = commands;
     code->number_of_commands = number_of_commands;
+    code->exception_table = exception_table;
     
     return code;
 }
@@ -42,7 +46,7 @@ void flux_code_free(FluxCode* code) {
     free(code);
 }
 
-int flux_code_convert_to_flux_commands(char* bytes, int length, FluxCommand*** commands) {
+int flux_code_convert_to_flux_commands(char* bytes, int length, FluxCommand*** commands, FluxExceptionTable** exception_table) {
 
     FluxList* list = flux_list_init(sizeof(FluxCommand*));
 
@@ -67,6 +71,21 @@ int flux_code_convert_to_flux_commands(char* bytes, int length, FluxCommand*** c
             FluxCommand* ipush_command = flux_command_init(IPUSH, param, 1);
             flux_list_add(list, ipush_command);
             number_of_commands++;
+        }
+        else if (bytes[i] == AEX) {
+            i++;
+            int from_instruction = read_integer((bytes + i));
+            i += 4;
+            int to_instruction = read_integer((bytes + i));
+            i += 4;
+            int jump_location = read_integer((bytes + i));
+            i += 4;
+            int type_len = read_integer((bytes + i));
+            i += 4;
+
+            FluxException* ex = flux_exception_init(from_instruction, to_instruction, jump_location, (bytes + i), type_len);
+            flux_exception_table_add(*exception_table, ex);
+            i += type_len - 1;
         }
         else if (bytes[i] == SPUSH) {
             int str_length;

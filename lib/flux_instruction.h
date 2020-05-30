@@ -21,6 +21,8 @@ typedef enum {
     IMUL,
     IDIV,
     SPUSH,
+    AEX,
+    TINT,
 
 } FluxInstruction;
 

@@ -1,5 +1,6 @@
 #include"flux_object.h"
 #include "flux_cmp_result.h"
+#include "flux_exception.h"
 #include"flux_log.h"
 #include "flux_vm.h"
 #include<stdlib.h>
@@ -41,6 +42,8 @@ FluxObject* flux_object_cinit(char value) {
     *((char*)obj->value) = value;
     return obj;
 }
+
+
 
 size_t flux_object_get_size(FluxObject* obj) {
     return obj->value_size;

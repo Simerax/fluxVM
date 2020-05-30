@@ -1,5 +1,8 @@
 #include"flux_vm.h"
 #include "flux_cmp_result.h"
+#include "flux_error.h"
+#include "flux_exception.h"
+#include "flux_exception_table.h"
 #include"flux_log.h"
 #include "flux_object.h"
 #include"flux_stack.h"
@@ -80,8 +83,8 @@ void flux_vm_imul(FluxVM* vm) {
     flux_stack_imul(vm->stack);
 }
 
-void flux_vm_idiv(FluxVM* vm) {
-    flux_stack_idiv(vm->stack);
+FluxArithmeticError flux_vm_idiv(FluxVM* vm) {
+    return flux_stack_idiv(vm->stack);
 }
 
 void flux_vm_print(FluxVM* vm) {
@@ -176,11 +179,12 @@ bool flux_vm_jge(FluxVM* vm, FluxObject* address) {
 void flux_vm_execute(FluxVM* vm, FluxCode* code) {
 
     vm->instruction_index = 0;
+    vm->did_jump = false;
 
     while(vm->instruction_index < code->number_of_commands) {
         FluxCommand* cmd = code->commands[vm->instruction_index];
 
-        bool did_jump = false;
+        FluxArithmeticError error = no_error;
 
 
         switch(cmd->instruction) {
@@ -194,7 +198,12 @@ void flux_vm_execute(FluxVM* vm, FluxCode* code) {
                        break;
             case IMUL: flux_vm_imul(vm);
                        break;
-            case IDIV: flux_vm_idiv(vm);
+            case IDIV: 
+                       error = flux_vm_idiv(vm);
+                       if(error == division_by_zero) {
+                           flux_vm_throw_internal(vm, "DivisionByZero", code->exception_table);
+                           error = no_error;
+                       }
                        break;
             case ITOD: flux_vm_itod(vm);
                        break;
@@ -210,21 +219,21 @@ void flux_vm_execute(FluxVM* vm, FluxCode* code) {
                           break;
             case JSR: flux_vm_ipush(vm, vm->instruction_index);
                       flux_vm_jmp(vm, cmd->parameters[0]);
-                      did_jump = true;
+                      vm->did_jump = true;
                       break;
             case CMP: flux_vm_cmp(vm);
                       break;
             case JE: if(flux_vm_je(vm, cmd->parameters[0]))
-                         did_jump = true;
+                         vm->did_jump = true;
                      break;
             case JL: if(flux_vm_jl(vm, cmd->parameters[0]))
-                         did_jump = true;
+                         vm->did_jump = true;
                      break;
             case JLE: if(flux_vm_jle(vm, cmd->parameters[0]))
-                          did_jump = true;
+                          vm->did_jump = true;
                       break;
             case JGE: if(flux_vm_jge(vm, cmd->parameters[0]))
-                          did_jump = true;
+                          vm->did_jump = true;
                       break;
                      
                      break;
@@ -232,10 +241,18 @@ void flux_vm_execute(FluxVM* vm, FluxCode* code) {
                      break;
         }
 
-        if(did_jump)
-            did_jump = false;
+        if(vm->did_jump)
+            vm->did_jump = false;
         else
             vm->instruction_index++;
+    }
+}
+
+void flux_vm_throw_internal(FluxVM *vm, char exception_type[], FluxExceptionTable *table) {
+    FluxException* ex = flux_exception_table_lookup(table, exception_type, vm->instruction_index);
+    if(ex != NULL) {
+        vm->instruction_index = ex->jump_instruction;
+        vm->did_jump = true;
     }
 }
 

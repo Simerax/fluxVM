@@ -1,9 +1,11 @@
 #ifndef FLUX_VM_H
 #define FLUX_VM_H
 
+#include "flux_exception_table.h"
 #include"flux_stack.h"
-#include"flux_code.h"
+#include "flux_code.h"
 #include "flux_cmp_result.h"
+#include "flux_error.h"
 
 #define FLUX_MAX_VARS 256
 
@@ -12,7 +14,7 @@ typedef struct {
     FluxObject** vars;
     int instruction_index;
     FluxCmpResult cmp_flag;
-    bool jmp_flag;
+    bool did_jump;
 } FluxVM;
 
 
@@ -30,8 +32,10 @@ void flux_vm_push(FluxVM*, FluxObject*);
 void flux_vm_iadd(FluxVM*);
 void flux_vm_isub(FluxVM*);
 void flux_vm_imul(FluxVM*);
-void flux_vm_idiv(FluxVM*);
+FluxArithmeticError flux_vm_idiv(FluxVM*);
 void flux_vm_pop(FluxVM*);
+
+void flux_vm_throw_internal(FluxVM*, char[], FluxExceptionTable*);
 
 void flux_vm_itod(FluxVM*);
 

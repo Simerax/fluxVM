@@ -100,7 +100,7 @@ void flux_stack_imul(FluxStack* stack) {
     }
 }
 
-void flux_stack_idiv(FluxStack* stack) {
+FluxArithmeticError flux_stack_idiv(FluxStack* stack) {
     FluxObject* a = flux_stack_get_noffset(stack, 1);
     FluxObject* b = flux_stack_get_noffset(stack, 2);
     if(a != NULL && b != NULL) {
@@ -110,7 +110,7 @@ void flux_stack_idiv(FluxStack* stack) {
         if(divisor == 0) {
             flux_stack_pop(stack);
             flux_stack_pop(stack);
-            flux_stack_ipush(stack, 0); // TODO: FIXME: Division by zero is not possible this needs to be addressed
+            return division_by_zero;
         }
 
         int result = *((int*)b->value) / divisor;
@@ -120,6 +120,7 @@ void flux_stack_idiv(FluxStack* stack) {
     } else {
         FLUX_ELOG("Cannot do integer division on NULL objects a: %p b: %p", a, b);
     }
+    return no_error;
 }
 
 FluxObject* flux_stack_get_noffset(FluxStack* stack, int offset) {

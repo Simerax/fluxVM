@@ -1,5 +1,6 @@
 #ifndef FLUX_STACK_H
 #define FLUX_STACK_H
+#include "flux_error.h"
 #include"flux_object.h"
 
 #define FLUX_STACK_SIZE 65536
@@ -9,6 +10,7 @@ typedef enum {
     flux_stack_error_overflow, // Stack Index is greater STACK_SIZE
     flux_stack_error_underflow, // Stack Index is smaller 0
     flux_stack_error_underflow_access, // Tried to access a Stack Element at index smaller 0
+    flux_stack_error_division_by_zero, // Tried to divide a number by zero
 } FluxStackError;
 
 typedef struct {
@@ -28,7 +30,7 @@ void flux_stack_cpush(FluxStack*, char value);
 void flux_stack_iadd(FluxStack*);
 void flux_stack_isub(FluxStack*);
 void flux_stack_imul(FluxStack*);
-void flux_stack_idiv(FluxStack*);
+FluxArithmeticError flux_stack_idiv(FluxStack*);
 
 void flux_stack_set_error(FluxStack*, FluxStackError);
 FluxStackError flux_stack_get_error(FluxStack*);
