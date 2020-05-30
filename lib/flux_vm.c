@@ -201,7 +201,7 @@ void flux_vm_execute(FluxVM* vm, FluxCode* code) {
             case IDIV: 
                        error = flux_vm_idiv(vm);
                        if(error == division_by_zero) {
-                           flux_vm_throw_internal(vm, "DivisionByZero", code->exception_table);
+                           flux_vm_throw_internal(vm, flux_exception_type_division_by_zero, code->exception_table);
                            error = no_error;
                        }
                        break;
@@ -248,8 +248,8 @@ void flux_vm_execute(FluxVM* vm, FluxCode* code) {
     }
 }
 
-void flux_vm_throw_internal(FluxVM *vm, char exception_type[], FluxExceptionTable *table) {
-    FluxException* ex = flux_exception_table_lookup(table, exception_type, vm->instruction_index);
+void flux_vm_throw_internal(FluxVM *vm, FluxExceptionType type, FluxExceptionTable *table) {
+    FluxException* ex = flux_exception_table_lookup(table, type, vm->instruction_index);
     if(ex != NULL) {
         vm->instruction_index = ex->jump_instruction;
         vm->did_jump = true;

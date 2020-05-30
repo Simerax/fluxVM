@@ -1021,10 +1021,7 @@ START_TEST (test_bytecode_EXCEPTION_IDIV_BY_ZERO)
         0,0,0,0, // valid from instruction 0 (IPUSH)
         0,0,0,2, // up to instruction 2 (IDIV)
         0,0,0,4, // in case there is a throw we jump to Instruction 4 (the last IPUSH)
-        // the type for which this exception is valid - DivisionByZero
-        0,0,0,15,
-        'D','i','v','i','s','i','o','n','B','y','Z','e','r','o','\0',
-
+        0,0,0,0, // flux_exception_type_division_by_zero,
 
         // Start actual code
         IPUSH,

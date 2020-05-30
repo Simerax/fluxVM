@@ -42,10 +42,10 @@ void flux_exception_table_add(FluxExceptionTable* ext, FluxException* ex) {
     ext->number_of_exceptions++;
 }
 
-FluxException* flux_exception_table_lookup(FluxExceptionTable* table, char name[], unsigned int at_instruction) {
+FluxException* flux_exception_table_lookup(FluxExceptionTable* table, FluxExceptionType type, unsigned int at_instruction) {
     for(int i = 0; i < table->number_of_exceptions; i++) {
         FluxException* ex = table->exceptions[i];
-        if(strcmp(ex->type_name, name) == 0 && ex->from_instruction <= at_instruction && ex->to_instruction >= at_instruction) {
+        if(ex->exception_type == type && ex->from_instruction <= at_instruction && ex->to_instruction >= at_instruction) {
             return ex;
         }
     }

@@ -15,7 +15,7 @@ FluxExceptionTable* flux_exception_table_init();
 void flux_exception_table_free(FluxExceptionTable*);
 
 void flux_exception_table_add(FluxExceptionTable*, FluxException*);
-FluxException* flux_exception_table_lookup(FluxExceptionTable* table, char name[], unsigned int at_instruction);
+FluxException* flux_exception_table_lookup(FluxExceptionTable* table, FluxExceptionType type, unsigned int at_instruction);
 
 
 #endif

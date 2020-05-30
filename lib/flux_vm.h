@@ -1,6 +1,7 @@
 #ifndef FLUX_VM_H
 #define FLUX_VM_H
 
+#include "flux_exception.h"
 #include "flux_exception_table.h"
 #include"flux_stack.h"
 #include "flux_code.h"
@@ -35,7 +36,7 @@ void flux_vm_imul(FluxVM*);
 FluxArithmeticError flux_vm_idiv(FluxVM*);
 void flux_vm_pop(FluxVM*);
 
-void flux_vm_throw_internal(FluxVM*, char[], FluxExceptionTable*);
+void flux_vm_throw_internal(FluxVM*, FluxExceptionType, FluxExceptionTable*);
 
 void flux_vm_itod(FluxVM*);
 

@@ -80,12 +80,12 @@ int flux_code_convert_to_flux_commands(char* bytes, int length, FluxCommand*** c
             i += 4;
             int jump_location = read_integer((bytes + i));
             i += 4;
-            int type_len = read_integer((bytes + i));
+            int exception_type = read_integer((bytes + i));
             i += 4;
 
-            FluxException* ex = flux_exception_init(from_instruction, to_instruction, jump_location, (bytes + i), type_len);
+            FluxException* ex = flux_exception_init(from_instruction, to_instruction, jump_location, exception_type);
             flux_exception_table_add(*exception_table, ex);
-            i += type_len - 1;
+            i--; // the index is incremeted in the next loop
         }
         else if (bytes[i] == SPUSH) {
             int str_length;
