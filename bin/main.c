@@ -30,7 +30,15 @@ int main(int argc, char** argv)
     FluxCode* code = flux_code_init(fvm_filecontent, f_length);
     FluxVM* vm = flux_vm_init();
 
-    flux_vm_execute(vm, code);
+    FluxVMError error = flux_vm_execute(vm, code);
+    if(error.type != flux_vm_error_type_no_error) {
+        puts("Error while executing bytecode\n");
+        switch(error.type) {
+            case flux_vm_error_type_uncaught_exception: printf("Uncaught Exception at Position %d", error.position); break;
+            default: puts("Unknown Error"); break;
+        }
+        puts("\n");
+    }
     flux_code_free(code);
     flux_vm_free(vm);
     return 0;
