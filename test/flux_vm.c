@@ -1248,6 +1248,80 @@ START_TEST (test_bytecode_CALL_FUNCTION_0_ARGUMENTS)
 }
 END_TEST
 
+START_TEST (test_bytecode_CALL_FUNCTION_2_ARGUMENTS)
+{
+    FluxVM* vm = flux_vm_init();
+
+    char bytecode[] = {
+
+        IPUSH,
+        0,0,0,2,
+
+        IPUSH,
+        0,0,0,4,
+
+        STORE0,
+        STORE1,
+
+        JSR,
+        0,0,0,6,
+        EXIT,
+
+        LOAD0,
+        LOAD1,
+        IADD,
+        RET,
+    };
+
+    FluxCode* code = flux_code_init(bytecode, sizeof(bytecode));
+
+    ck_assert_ptr_nonnull(code);
+
+    ck_assert_int_eq(code->number_of_commands, 10);
+
+    FluxCommand** commands = code->commands;
+    ck_assert_ptr_nonnull(commands);
+    ck_assert_ptr_nonnull(commands[0]);
+    ck_assert_ptr_nonnull(commands[1]);
+    ck_assert_ptr_nonnull(commands[2]);
+    ck_assert_ptr_nonnull(commands[3]);
+    ck_assert_ptr_nonnull(commands[4]);
+    ck_assert_ptr_nonnull(commands[5]);
+    ck_assert_ptr_nonnull(commands[6]);
+    ck_assert_ptr_nonnull(commands[7]);
+    ck_assert_ptr_nonnull(commands[8]);
+    ck_assert_ptr_nonnull(commands[9]);
+
+    ck_assert_int_eq(commands[0]->instruction, IPUSH);
+    ck_assert_int_eq(commands[1]->instruction, IPUSH);
+    ck_assert_int_eq(commands[2]->instruction, STORE0);
+    ck_assert_int_eq(commands[3]->instruction, STORE1);
+    ck_assert_int_eq(commands[4]->instruction, JSR);
+    ck_assert_int_eq(commands[5]->instruction, EXIT);
+    ck_assert_int_eq(commands[6]->instruction, LOAD0);
+    ck_assert_int_eq(commands[7]->instruction, LOAD1);
+    ck_assert_int_eq(commands[8]->instruction, IADD);
+    ck_assert_int_eq(commands[9]->instruction, RET);
+
+
+    flux_vm_execute(vm, code);
+
+    FluxObject* result = flux_stack_get_noffset(vm->stack, 1);
+    FluxObject* should_be_null = flux_stack_get_noffset(vm->stack, 2);
+
+    ck_assert_ptr_nonnull(result);
+    ck_assert_ptr_null(should_be_null);
+
+    ck_assert_int_eq(flux_object_get_int_value(result), 6);
+    ck_assert_int_eq(flux_object_get_type(result), Integer);
+
+
+
+    flux_code_free(code);
+    flux_vm_free(vm);
+}
+END_TEST
+
 TEST_HELPER_START(flux_vm);
 
 TEST_HELPER_ADD_TEST(test_stack_integer_addition);
@@ -1275,5 +1349,6 @@ TEST_HELPER_ADD_TEST(test_bytecode_EXCEPTION_IDIV_BY_ZERO);
 TEST_HELPER_ADD_TEST(test_bytecode_EXCEPTION_THROW_INTEGER);
 TEST_HELPER_ADD_TEST(test_bytecode_EXCEPTION_THROW_INTEGER_NO_EXCEPTION_TABLE);
 TEST_HELPER_ADD_TEST(test_bytecode_CALL_FUNCTION_0_ARGUMENTS);
+TEST_HELPER_ADD_TEST(test_bytecode_CALL_FUNCTION_2_ARGUMENTS);
 
 TEST_HELPER_END_TEST

@@ -132,6 +132,20 @@ typedef enum {
     // Does not take any arguments at the moment
     EXIT,
 
+    // Load variable 0 up to 3 and put it on the stack
+    // just a shortcut for the regular LOAD instruction
+    LOAD0,
+    LOAD1,
+    LOAD2,
+    LOAD3,
+
+    // Store stack value in variable 0 up to 3
+    // just a shortcut for the regular STORE instruction
+    STORE0,
+    STORE1,
+    STORE2,
+    STORE3,
+
 } FluxInstruction;
 
 #endif //FLUX_INSTRUCTION_H

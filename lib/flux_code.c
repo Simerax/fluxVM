@@ -102,7 +102,7 @@ int flux_code_convert_to_flux_commands(char* bytes, int length, FluxCommand*** c
             flux_list_add(list, spush_command);
             number_of_commands++;
         }
-        else if (bytes[i] == IADD || bytes[i] == ISUB || bytes[i] == LOAD || bytes[i] == STORE || bytes[i] == CMP || bytes[i] == IMUL || bytes[i] == IDIV || bytes[i] == THROW || bytes[i] == RET || bytes[i] == EXIT) {
+        else if (bytes[i] == IADD || bytes[i] == ISUB || bytes[i] == LOAD || bytes[i] == LOAD0 || bytes[i] == LOAD1 || bytes[i] == LOAD2 || bytes[i] == LOAD3|| bytes[i] == STORE || bytes[i] == STORE0 || bytes[i] == STORE1 || bytes[i] == STORE2 || bytes[i] == STORE3|| bytes[i] == CMP || bytes[i] == IMUL || bytes[i] == IDIV || bytes[i] == THROW || bytes[i] == RET || bytes[i] == EXIT) {
             flux_list_add(list, flux_command_init(bytes[i], NULL, 0));
             number_of_commands++;
         }

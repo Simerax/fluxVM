@@ -44,7 +44,9 @@ void flux_vm_print(FluxVM*);
 void flux_vm_inspect(FluxVM*);
 
 void flux_vm_store(FluxVM*);
+void flux_vm_store_index(FluxVM*, unsigned int);
 void flux_vm_load(FluxVM*);
+void flux_vm_load_index(FluxVM*, unsigned int);
 
 void flux_vm_ipush(FluxVM*, int value);
 void flux_vm_push(FluxVM*, FluxObject*);

@@ -42,6 +42,19 @@ void flux_vm_free(FluxVM* vm) {
     free(vm);
 }
 
+void flux_vm_store_index(FluxVM* vm, unsigned int index) {
+    FluxObject* obj = flux_stack_get_noffset(vm->stack, 1);
+
+    if(obj == NULL) {
+        FLUX_ELOG("Tried storing a NULL object");
+        return;
+    }
+
+    flux_object_inc_ref(obj);
+    flux_object_dec_ref(vm->vars[index]);
+    vm->vars[index] = obj;
+    flux_stack_pop(vm->stack);
+}
 
 void flux_vm_store(FluxVM* vm) {
     FluxObject* index_obj = flux_stack_get_noffset(vm->stack, 1);
@@ -73,6 +86,14 @@ void flux_vm_load(FluxVM* vm) {
     flux_vm_pop(vm); // get rid of the index_obj
     flux_stack_push(vm->stack, obj);
 }
+
+
+void flux_vm_load_index(FluxVM* vm, unsigned int index) {
+    FluxObject* obj = vm->vars[index];
+    flux_stack_push(vm->stack, obj);
+}
+
+
 void flux_vm_ipush(FluxVM* vm, int value) {
     flux_stack_ipush(vm->stack, value);
 }
@@ -218,8 +239,24 @@ FluxVMError flux_vm_execute(FluxVM* vm, FluxCode* code) {
                       break;
             case LOAD: flux_vm_load(vm);
                        break;
+            case LOAD0: flux_vm_load_index(vm, 0);
+                        break;
+            case LOAD1: flux_vm_load_index(vm, 1);
+                        break;
+            case LOAD2: flux_vm_load_index(vm, 2);
+                        break;
+            case LOAD3: flux_vm_load_index(vm, 3);
+                        break;
             case STORE: flux_vm_store(vm);
                         break;
+            case STORE0: flux_vm_store_index(vm, 0);
+                         break;
+            case STORE1: flux_vm_store_index(vm, 1);
+                         break;
+            case STORE2: flux_vm_store_index(vm, 2);
+                         break;
+            case STORE3: flux_vm_store_index(vm, 3);
+                         break;
             case PRINT: flux_vm_print(vm);
                         break;
             case INSPECT: flux_vm_inspect(vm);
