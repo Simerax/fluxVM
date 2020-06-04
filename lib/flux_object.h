@@ -49,6 +49,8 @@ double flux_object_get_double_value(FluxObject*);
 
 size_t flux_object_get_size(FluxObject*);
 
+unsigned int flux_object_get_ref_count(FluxObject*);
+
 
 FluxObjectType flux_object_get_type(FluxObject*);
 FluxExceptionType flux_object_get_exception_type(FluxObject*);

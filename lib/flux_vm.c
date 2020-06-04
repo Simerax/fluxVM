@@ -284,6 +284,10 @@ FluxVMError flux_vm_execute(FluxVM* vm, FluxCode* code) {
                       break;
             case EXIT: vm->exit_flag = true;
                        break;
+            case IREF: flux_vm_inc_ref(vm, cmd->parameters[0]);
+                       break;
+            case DREF: flux_vm_dec_ref(vm, cmd->parameters[0]);
+                       break;
             default: FLUX_ELOG("Unknown Instruction %d", cmd->instruction);
                      break;
         }
@@ -370,3 +374,11 @@ void flux_vm_ret(FluxVM* vm) {
     flux_object_dec_ref(return_value);
 }
 
+void flux_vm_inc_ref(FluxVM* vm, FluxObject* index_obj) {
+    int index = flux_object_get_int_value(index_obj);
+    flux_object_inc_ref(vm->vars[index]);
+}
+void flux_vm_dec_ref(FluxVM* vm, FluxObject* index_obj) {
+    int index = flux_object_get_int_value(index_obj);
+    flux_object_dec_ref(vm->vars[index]);
+}

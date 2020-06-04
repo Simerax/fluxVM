@@ -146,6 +146,17 @@ typedef enum {
     STORE2,
     STORE3,
 
+    // Increment the Ref-Count of the given Variable
+    // Params:
+    //  int variable_index
+    IREF,
+
+
+    // Decrement the Ref-Count of the given Variable
+    // Params:
+    //  int variable_index
+    DREF,
+
 } FluxInstruction;
 
 #endif //FLUX_INSTRUCTION_H

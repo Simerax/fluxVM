@@ -192,6 +192,10 @@ FluxCmpResult flux_object_cmp(FluxObject* a, FluxObject* b) {
     return EQUAL; // FIXME: Well this is just wrong but rn its not a problem
 }
 
+unsigned int flux_object_get_ref_count(FluxObject* obj) {
+    return obj->ref_count;
+}
+
 FluxExceptionType flux_object_get_exception_type(FluxObject* obj) {
     switch(flux_object_get_type(obj)) {
         case Integer: return flux_exception_type_integer;

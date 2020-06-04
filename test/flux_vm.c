@@ -1322,6 +1322,121 @@ START_TEST (test_bytecode_CALL_FUNCTION_2_ARGUMENTS)
 }
 END_TEST
 
+START_TEST (test_bytecode_IREF)
+{
+    FluxVM* vm = flux_vm_init();
+
+    char bytecode[] = {
+
+        IPUSH,
+        0,0,0,2,
+
+        STORE0,
+
+        IREF,
+        0,0,0,0,
+
+        LOAD0,
+    };
+
+    FluxCode* code = flux_code_init(bytecode, sizeof(bytecode));
+
+    ck_assert_ptr_nonnull(code);
+
+    ck_assert_int_eq(code->number_of_commands, 4);
+
+    FluxCommand** commands = code->commands;
+    ck_assert_ptr_nonnull(commands);
+    ck_assert_ptr_nonnull(commands[0]);
+    ck_assert_ptr_nonnull(commands[1]);
+    ck_assert_ptr_nonnull(commands[2]);
+    ck_assert_ptr_nonnull(commands[3]);
+
+    ck_assert_int_eq(commands[0]->instruction, IPUSH);
+    ck_assert_int_eq(commands[1]->instruction, STORE0);
+    ck_assert_int_eq(commands[2]->instruction, IREF);
+    ck_assert_int_eq(commands[3]->instruction, LOAD0);
+
+
+    flux_vm_execute(vm, code);
+
+    FluxObject* result = flux_stack_get_noffset(vm->stack, 1);
+    FluxObject* should_be_null = flux_stack_get_noffset(vm->stack, 2);
+
+    ck_assert_ptr_nonnull(result);
+    ck_assert_ptr_null(should_be_null);
+
+    ck_assert_int_eq(flux_object_get_int_value(result), 2);
+    ck_assert_int_eq(flux_object_get_ref_count(result), 4);
+    ck_assert_int_eq(flux_object_get_type(result), Integer);
+
+
+
+    flux_code_free(code);
+    flux_vm_free(vm);
+}
+END_TEST
+
+START_TEST (test_bytecode_DREF)
+{
+    FluxVM* vm = flux_vm_init();
+
+    char bytecode[] = {
+
+        IPUSH,
+        0,0,0,2,
+
+        STORE0,
+
+        IREF,
+        0,0,0,0,
+
+        DREF,
+        0,0,0,0,
+
+        LOAD0,
+    };
+
+    FluxCode* code = flux_code_init(bytecode, sizeof(bytecode));
+
+    ck_assert_ptr_nonnull(code);
+
+    ck_assert_int_eq(code->number_of_commands, 5);
+
+    FluxCommand** commands = code->commands;
+    ck_assert_ptr_nonnull(commands);
+    ck_assert_ptr_nonnull(commands[0]);
+    ck_assert_ptr_nonnull(commands[1]);
+    ck_assert_ptr_nonnull(commands[2]);
+    ck_assert_ptr_nonnull(commands[3]);
+    ck_assert_ptr_nonnull(commands[4]);
+
+    ck_assert_int_eq(commands[0]->instruction, IPUSH);
+    ck_assert_int_eq(commands[1]->instruction, STORE0);
+    ck_assert_int_eq(commands[2]->instruction, IREF);
+    ck_assert_int_eq(commands[3]->instruction, DREF);
+    ck_assert_int_eq(commands[4]->instruction, LOAD0);
+
+
+    flux_vm_execute(vm, code);
+
+    FluxObject* result = flux_stack_get_noffset(vm->stack, 1);
+    FluxObject* should_be_null = flux_stack_get_noffset(vm->stack, 2);
+
+    ck_assert_ptr_nonnull(result);
+    ck_assert_ptr_null(should_be_null);
+
+    ck_assert_int_eq(flux_object_get_int_value(result), 2);
+    ck_assert_int_eq(flux_object_get_ref_count(result), 3);
+    ck_assert_int_eq(flux_object_get_type(result), Integer);
+
+
+
+    flux_code_free(code);
+    flux_vm_free(vm);
+}
+END_TEST
+
 TEST_HELPER_START(flux_vm);
 
 TEST_HELPER_ADD_TEST(test_stack_integer_addition);
@@ -1350,5 +1465,7 @@ TEST_HELPER_ADD_TEST(test_bytecode_EXCEPTION_THROW_INTEGER);
 TEST_HELPER_ADD_TEST(test_bytecode_EXCEPTION_THROW_INTEGER_NO_EXCEPTION_TABLE);
 TEST_HELPER_ADD_TEST(test_bytecode_CALL_FUNCTION_0_ARGUMENTS);
 TEST_HELPER_ADD_TEST(test_bytecode_CALL_FUNCTION_2_ARGUMENTS);
+TEST_HELPER_ADD_TEST(test_bytecode_IREF);
+TEST_HELPER_ADD_TEST(test_bytecode_DREF);
 
 TEST_HELPER_END_TEST

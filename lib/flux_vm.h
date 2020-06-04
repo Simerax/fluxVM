@@ -74,6 +74,9 @@ void flux_vm_cmp(FluxVM*);
 
 void flux_vm_ret(FluxVM*);
 
+void flux_vm_inc_ref(FluxVM*, FluxObject*);
+void flux_vm_dec_ref(FluxVM*, FluxObject*);
+
 
 
 #endif //FLUX_VM_H

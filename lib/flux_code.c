@@ -136,6 +136,19 @@ int flux_code_convert_to_flux_commands(char* bytes, int length, FluxCommand*** c
             FluxCommand* jmp = flux_command_init(instruction, param, 1);
             flux_list_add(list, jmp);
             number_of_commands++;
+        } else if(bytes[i] == IREF || bytes[i] == DREF) {
+            FluxInstruction instruction = bytes[i];
+            int index;
+            memcpy(&index, (bytes + i + 1), 4);
+            index = INT32_TO_SYSTEM_ENDIANNESS(index);
+            i+=4;
+
+            FluxObject* obj = flux_object_iinit(index);
+            FluxObject** param = malloc(sizeof(FluxObject*));
+            param[0] = obj;
+            FluxCommand* iref = flux_command_init(instruction,param, 1);
+            flux_list_add(list, iref);
+            number_of_commands++;
         }
         else {
             FLUX_WLOG("Unknown Command '%d' in bytecode at byte position %d -- Command is being ignored", bytes[i], i);
