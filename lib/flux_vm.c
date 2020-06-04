@@ -355,6 +355,7 @@ void flux_vm_cmp(FluxVM* vm) {
 void flux_vm_jsr(FluxVM* vm, FluxObject* address) {
     FluxObject* frame = flux_object_frame_init(vm->instruction_index + 1);
     flux_vm_push(vm, frame);
+    flux_object_dec_ref(frame);
     flux_vm_jmp(vm, address);
 }
 

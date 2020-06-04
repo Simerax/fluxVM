@@ -42,11 +42,13 @@ void flux_stack_pop(FluxStack* stack) {
 void flux_stack_cpush(FluxStack* stack, char value) {
     FluxObject* chr = flux_object_cinit(value);
     flux_stack_push(stack, chr);
+    flux_object_dec_ref(chr);
 }
 
 void flux_stack_ipush(FluxStack* stack, int value) {
     FluxObject* integer = flux_object_iinit(value);
     flux_stack_push(stack, integer);
+    flux_object_dec_ref(integer);
 }
 
 void flux_stack_push(FluxStack* stack, FluxObject* obj) {
