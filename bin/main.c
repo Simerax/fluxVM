@@ -29,6 +29,7 @@ int main(int argc, char** argv)
 
     FluxCode* code = flux_code_init(fvm_filecontent, f_length);
     FluxVM* vm = flux_vm_init();
+    free(fvm_filecontent);
 
     FluxVMError error = flux_vm_execute(vm, code);
     if(error.type != flux_vm_error_type_no_error) {

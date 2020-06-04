@@ -39,6 +39,7 @@ void flux_vm_free(FluxVM* vm) {
             flux_object_dec_ref(vm->vars[i]);
 
     FLUX_DLOG("Freeing FluxVM %p", vm);
+    free(vm->vars);
     free(vm);
 }
 

@@ -43,6 +43,8 @@ void flux_code_free(FluxCode* code) {
         if(code->commands[i] != NULL)
             flux_command_free(code->commands[i]);
     }
+    free(code->commands);
+    flux_exception_table_free(code->exception_table);
     free(code);
 }
 
@@ -142,6 +144,7 @@ int flux_code_convert_to_flux_commands(char* bytes, int length, FluxCommand*** c
 
 
     *commands = (FluxCommand**)flux_list_to_array(list);
+    flux_list_free(list);
     
     return number_of_commands;
 }

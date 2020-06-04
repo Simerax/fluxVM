@@ -28,6 +28,7 @@ void flux_exception_table_free(FluxExceptionTable* ext) {
             free(ext->exceptions[i]);
         }
     }
+    free(ext->exceptions);
     free(ext);
 }
 

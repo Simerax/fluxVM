@@ -24,7 +24,7 @@ void flux_stack_free(FluxStack* stack) {
             flux_object_dec_ref(stack->objects[i]);
         }
     }
-
+    free(stack->objects);
     free(stack);
 }
 

@@ -18,5 +18,6 @@ void flux_command_free(FluxCommand* cmd) {
         if(cmd->parameters[i] != NULL)
             flux_object_dec_ref(cmd->parameters[i]);
     }
+    free(cmd->parameters);
     free(cmd);
 }
