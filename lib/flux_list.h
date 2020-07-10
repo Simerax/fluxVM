@@ -5,10 +5,11 @@
 typedef struct FluxList {
     size_t element_size;
     void* element;
+    void (*element_free_func)(void*);
     struct FluxList* next;
 } FluxList;
 
-FluxList* flux_list_init(size_t element_size);
+FluxList* flux_list_init(size_t element_size, void(*f)(void*));
 void flux_list_free(FluxList*);
 
 void flux_list_add(FluxList*, void* element);
