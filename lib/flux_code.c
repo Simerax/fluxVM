@@ -50,7 +50,7 @@ void flux_code_free(FluxCode* code) {
 
 int flux_code_convert_to_flux_commands(char* bytes, int length, FluxCommand*** commands, FluxExceptionTable** exception_table) {
 
-    FluxList* list = flux_list_init(sizeof(FluxCommand*));
+    FluxList* list = flux_list_init(sizeof(FluxCommand*), NULL);
 
     int number_of_commands = 0;
 

@@ -4,11 +4,12 @@
 #include "flux_log.h"
 
 
-FluxList* flux_list_init(size_t element_size) {
+FluxList* flux_list_init(size_t element_size, void (*free_func)(void*)) {
     FluxList* l = malloc(sizeof(FluxList));
     l->element_size = element_size;
     l->next = NULL;
     l->element = NULL;
+    l->element_free_func = free_func;
     return l;
 }
 
@@ -16,11 +17,16 @@ void flux_list_free(FluxList* l) {
     if(l == NULL)
         return;
 
-    // TODO: FIXME: This is really bad since it does one recursion per list element has to be fixed
-    if(l->next != NULL)
-        flux_list_free(l->next);
+    FluxList* current = l;
 
-    free(l);
+    while(current != NULL) {
+        FluxList* previous = current;
+        current = current->next;
+        if(previous->element_free_func != NULL) {
+            previous->element_free_func(previous->element);
+        }
+        free(previous);
+    }
 }
 
 
@@ -35,7 +41,7 @@ void flux_list_add(FluxList* l, void* element) {
         current_element->element = element;
     } else {
         if(current_element->next == NULL) {
-            current_element->next = flux_list_init(current_element->element_size);
+            current_element->next = flux_list_init(current_element->element_size, current_element->element_free_func);
             current_element->next->element = element;
         }
     }
